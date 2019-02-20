@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class Boss : Enemy {
     // Use this for initialization
+    GameManager gameManager;
     private void Awake()
     {
+        GameObject temp = GameObject.Find("GameManger");
+        gameManager = temp.GetComponent<GameManager>();
         player = GameObject.Find("Player");
     }
     void Start () {
@@ -15,6 +18,20 @@ public class Boss : Enemy {
 	
 	// Update is called once per frame
 	void Update () {
-		
-	}
+        if (isShooting == false)
+        {
+            ShootArrow();
+        }
+    }
+
+    protected override void LateUpdate()
+    {
+        if (health == 0)
+        {
+            gameManager.SetWinning(true);
+            Destroy(this.gameObject);
+        }
+    }
+
+
 }

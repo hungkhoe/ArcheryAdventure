@@ -42,7 +42,7 @@ public class Enemy : MonoBehaviour {
         health -= _damage;
     }
 
-    private void LateUpdate()
+    protected virtual void LateUpdate()
     {
         if (health == 0)
         {

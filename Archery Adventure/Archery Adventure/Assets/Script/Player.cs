@@ -33,4 +33,9 @@ public class Player : MonoBehaviour {
     {
         return damage;
     }
+
+    public int GetHealth()
+    {
+        return health;
+    }
 }

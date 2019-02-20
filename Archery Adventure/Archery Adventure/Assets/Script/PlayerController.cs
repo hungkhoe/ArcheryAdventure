@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     float storePower;
     [SerializeField]
     int damage;
+    bool isShooting = false;
 
     private void Awake()
     {        
@@ -98,7 +99,7 @@ public class PlayerController : MonoBehaviour
             lineCheck.SetPosition(0, dot_testArray[0].transform.position);
             lineCheck.SetPosition(1, dot_testArray[1].transform.position);
 
-            powerMeasurement = (Vector3.Distance(dot_testArray[0].transform.position, dot_testArray[1].transform.position)) * 25;
+            powerMeasurement = (Vector3.Distance(dot_testArray[0].transform.position, dot_testArray[1].transform.position)) * 30;
             Vector3 targerDirection = dot_testArray[1].transform.position - dot_testArray[0].transform.position;
 
             Vector3 targetDir = dot_testArray[1].transform.position - dot_testArray[0].transform.position;           
@@ -109,7 +110,7 @@ public class PlayerController : MonoBehaviour
             if (powerMeasurement >= 100)
             {
                 powerMeasurement = 100;
-            }            
+            }       
         }
     }    
 
