@@ -7,14 +7,17 @@ public class Bullet : MonoBehaviour {
     // Use this for initialization
     Vector2 direction = new Vector2(0, 0);
     Rigidbody2D rigid;
+    Collider2D col2d;
     float power;
     GameObject player;
     int damage;
+    bool hit = false;
     private void Awake()
     {
         player = GameObject.Find("Player");
         Physics2D.IgnoreCollision(player.gameObject.GetComponent<Collider2D>(), GetComponent<Collider2D>());        
         rigid = GetComponent<Rigidbody2D>();
+        col2d = GetComponent<Collider2D>();
     }
     void Start () {
         
@@ -22,9 +25,12 @@ public class Bullet : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        Vector2 v = rigid.velocity;
-        float angle = Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        if(rigid != null)
+        {
+            Vector2 v = rigid.velocity;
+            float angle = Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        }      
     }
 
     public void SetRotationAngle(float _angle)
@@ -43,18 +49,29 @@ public class Bullet : MonoBehaviour {
     {
         Destroy(gameObject);
     }
-
-    private void OnCollisionEnter2D(Collision2D collision)
+  
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.tag == "Enemy")
+        if (collision.gameObject.tag == "Enemy")
         {
-            collision.gameObject.GetComponent<Enemy>().TakeDamage(damage);
-            Destroy(gameObject);
-        }     
+            if (!hit)
+            {
+                collision.gameObject.GetComponent<Enemy>().TakeDamage(damage);
+                ArrowStick(collision);
+                hit = true;
+            }
+        }
     }
 
     public void SetDamage(int _damage)
     {
         damage = _damage;
+    }
+
+    void ArrowStick(Collider2D col)
+    {       
+        transform.parent = col.transform;        
+        Destroy(rigid);
+        Destroy(col2d);
     }
 }

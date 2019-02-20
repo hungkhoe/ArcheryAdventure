@@ -11,6 +11,7 @@ public class EnemyBullet : MonoBehaviour {
     Vector3 direction;
     Rigidbody2D rb;
     int damage;
+    bool hit = false;
     private void Awake()
     {   
         rb = GetComponent<Rigidbody2D>();
@@ -30,6 +31,7 @@ public class EnemyBullet : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
+        if(rb != null)
         rb.velocity = direction * 9.5f;
     }   
 
@@ -37,13 +39,25 @@ public class EnemyBullet : MonoBehaviour {
     {
         if (collision.gameObject.tag == "Player")
         {
-            playerScript.TakeDamage(1);
-            Destroy(this.gameObject);
+            if (!hit)
+            {              
+                collision.gameObject.GetComponent<Player>().TakeDamage(damage);
+                ArrowStick(collision);
+                hit = true;
+            }
+            playerScript.TakeDamage(1);            
         }
     }
 
     public void SetDamage(int _damage)
     {
         damage = _damage;
+    }
+
+    void ArrowStick(Collider2D col)
+    {
+        transform.parent = col.transform;
+        Destroy(GetComponent<Rigidbody2D>());
+        Destroy(GetComponent<Collider2D>());
     }
 }
