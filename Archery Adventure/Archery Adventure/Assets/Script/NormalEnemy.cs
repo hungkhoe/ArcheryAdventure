@@ -10,7 +10,7 @@ public class NormalEnemy : Enemy {
         player = GameObject.Find("Player");
     }
     void Start () {
-        health = 2;
+        health = 1;
         damage = 1;
 	}
 	

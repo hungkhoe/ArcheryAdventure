@@ -40,12 +40,11 @@ public class EnemyBullet : MonoBehaviour {
         if (collision.gameObject.tag == "Player")
         {
             if (!hit)
-            {              
-                collision.gameObject.GetComponent<Player>().TakeDamage(damage);
+            {                  
                 ArrowStick(collision);
                 hit = true;
+                playerScript.TakeDamage(damage);
             }
-            playerScript.TakeDamage(1);            
         }
     }
 

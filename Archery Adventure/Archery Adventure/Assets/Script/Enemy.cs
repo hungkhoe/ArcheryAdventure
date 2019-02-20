@@ -39,7 +39,7 @@ public class Enemy : MonoBehaviour {
 
     public void TakeDamage(int _damage)
     {
-        health -= damage;
+        health -= _damage;
     }
 
     private void LateUpdate()
