@@ -17,11 +17,11 @@ public class Enemy : MonoBehaviour {
     protected bool isShooting;   
     private void Awake()
     {
-        isShooting = false;
+      
     }
     void Start () {
-   
-	}
+        isShooting = false;
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -32,8 +32,7 @@ public class Enemy : MonoBehaviour {
     {
         GameObject temp = Instantiate(prefab_enemyArrow);
         temp.transform.position = this.transform.position;
-        temp.GetComponent<EnemyBullet>().SetDamage(damage);
-        //transform.rotation = Quaternion.AngleAxis(_angle, Vector3.back);       
+        temp.GetComponent<EnemyBullet>().SetDamage(damage);        
         isShooting = true;
     }
 
@@ -48,5 +47,10 @@ public class Enemy : MonoBehaviour {
         {
             Destroy(this.gameObject);
         }
+    }
+
+    public void SetShootingBool(bool _isShooting)
+    {
+        isShooting = _isShooting;
     }
 }

@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour {
 
     // Use this for initialization
     [SerializeField]
-    GameObject winningPanel;
+    GameObject winningPanel,losingPanel;
     [SerializeField]
     Button winningButton;
     [SerializeField]
@@ -37,7 +37,11 @@ public class GameManager : MonoBehaviour {
         }
         else if (playerScript.GetHealth() <= 0 )
         {
-            isLosing = true;           
+            isLosing = true;    
+            if(isLosing)
+            {
+                losingPanel.SetActive(true);
+            }
         }
 	}    
 
@@ -49,4 +53,5 @@ public class GameManager : MonoBehaviour {
     {
         isLosing = _isLosing;
     }
+
 }
