@@ -4,12 +4,9 @@
 TagManager:
   serializedVersion: 2
   tags:
-<<<<<<< HEAD
+  - Enemy
   - Ground
   - PosToJump
-=======
-  - Enemy
->>>>>>> 1b95cd3eebe861012eff68e6d094f01445a9e45e
   layers:
   - Default
   - TransparentFX
@@ -19,17 +16,10 @@ TagManager:
   - UI
   - 
   - 
-<<<<<<< HEAD
-  - StairLayer
+  - Stair
   - Ground
-  - Player
-  - 
-=======
-  - Enviroment
-  - Arrow
-  - EnemyArrow
   - Enemy
->>>>>>> 1b95cd3eebe861012eff68e6d094f01445a9e45e
+  - Player
   - 
   - 
   - 

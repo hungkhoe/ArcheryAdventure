@@ -24,14 +24,14 @@ public class PlayerController : MonoBehaviour
     int damage;
     bool isShooting = false;
 
-    private void Awake()
-    {        
-        GameObject temp = GameObject.Find("power_measure_text");
-        powerText = temp.GetComponent<Text>();
-        GameObject temp2 = GameObject.Find("angle_measure_text");
-        angleText = temp2.GetComponent<Text>();
-        
-    }
+//    private void Awake()
+//    {        
+//        GameObject temp = GameObject.Find("power_measure_text");
+//        powerText = temp.GetComponent<Text>();
+//        GameObject temp2 = GameObject.Find("angle_measure_text");
+//        angleText = temp2.GetComponent<Text>();
+//        
+//    }
     void Start()
     {
         damage = GetComponent<Player>().GetDamage();
@@ -40,13 +40,14 @@ public class PlayerController : MonoBehaviour
         lineCheck = gameObject.AddComponent<LineRenderer>();
         lineCheck.SetWidth(0.05f, 0.05f);
         lineCheck.SetVertexCount(2);
+		//lineCheck.SetPosition ();
     }
 
     // Update is called once per frame
     void Update()
     {
         PlayerControl();
-        UI_Update();        
+//        UI_Update();        
     }
 
     void PlayerControl()
@@ -96,8 +97,8 @@ public class PlayerController : MonoBehaviour
             convertPositon.z = 15;
             dot_testArray[1].transform.position = convertPositon;
 
-            lineCheck.SetPosition(0, dot_testArray[0].transform.position);
-            lineCheck.SetPosition(1, dot_testArray[1].transform.position);
+			lineCheck.SetPosition(0, new Vector3(dot_testArray[0].transform.position.x, dot_testArray[0].transform.position.y , -1));
+			lineCheck.SetPosition(1, new Vector3(dot_testArray[1].transform.position.x, dot_testArray[1].transform.position.y, -1));
 
             powerMeasurement = (Vector3.Distance(dot_testArray[0].transform.position, dot_testArray[1].transform.position)) * 30;
             Vector3 targerDirection = dot_testArray[1].transform.position - dot_testArray[0].transform.position;

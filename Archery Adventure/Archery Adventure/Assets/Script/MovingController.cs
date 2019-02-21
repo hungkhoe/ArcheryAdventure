@@ -11,31 +11,35 @@ public class MovingController : MonoBehaviour {
 	[SerializeField]
 	float heightStair = 0.4f;
 
+	[HideInInspector]
+	public int dir;
+
 	Rigidbody2D rb;
 	Vector2 forceMov;
-	int dir;
-	int curIdTrack;
 
-	static MovingController instance;
+	[HideInInspector]
+	public int curIdTrack;
+
+	//static MovingController instance;
 	// Use this for initialization
 	void Start () {
 
-	
+		dir = 1;
 	}
 
 	void Awake(){
 
-		instance = this;
+		//instance = this;
 		rb = GetComponent<Rigidbody2D> ();
 	}
 
-	public static MovingController Instance{
-
-		get{ 
-		
-			return instance;
-		}
-	}
+//	public static MovingController Instance{
+//
+//		get{ 
+//		
+//			return instance;
+//		}
+//	}
 		
 	public void InitMoving(){
 	
@@ -57,9 +61,8 @@ public class MovingController : MonoBehaviour {
 
 	IEnumerator Jump(int step, Vector2 endJump){
 
-		float scalGra = rb.gravityScale;
 		bool nextJump = true;
-		rb.gravityScale = 0;
+		rb.simulated = false;
 
 		for (int i = 0; i < step; i++) {
 
@@ -70,11 +73,13 @@ public class MovingController : MonoBehaviour {
 			
 				transform.DOJump (new Vector3 (endJump.x, transform.position.y + heightStair, 0), 0.5f, 1, 0.2f, false).OnComplete(()=>{
 
-					rb.gravityScale = scalGra;
+					rb.simulated = true;
+					rb.velocity = new Vector2(0,rb.velocity.y);
 					//turn around direction
 					dir *= -1;
 
-					StairController.Instance.MoveDownStair ();
+					if(name.Equals("Player"))
+						StairController.Instance.MoveDownStair ();
 				});
 				
 			} else {
@@ -92,11 +97,11 @@ public class MovingController : MonoBehaviour {
 	}
 
 	//
-//	IEnumerator TestMove(){
-//
-//		yield return new WaitForSeconds (2f);
-//		Move ();
-//	}
+	IEnumerator TestMove(){
+
+		yield return new WaitForSeconds (2f);
+		Move ();
+	}
 
 	void OnTriggerEnter2D(Collider2D col){
 
@@ -107,4 +112,5 @@ public class MovingController : MonoBehaviour {
 			StartCoroutine (Jump(step, endJump));
 		}
 	}
+		
 }

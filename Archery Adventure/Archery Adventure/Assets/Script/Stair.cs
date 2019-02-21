@@ -21,7 +21,7 @@ public class Stair : MonoBehaviour {
 	
 	void OnBecameInvisible()
 	{
-		gameObject.SetActive (false);
+		//gameObject.SetActive (false);
 		if (callBackHiddent != null)
 			callBackHiddent ();
 	}

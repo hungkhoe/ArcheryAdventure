@@ -39,11 +39,23 @@ public class Enemy : MonoBehaviour {
     public void TakeDamage(int _damage)
     {
         health -= _damage;
+		if (health > 0) {
+
+			//GetComponent<MovingController> ().Move ();
+			//GetComponent<Rigidbody2D>().velocity = new Vector2(-0.5f, 0);
+			GetComponent<MovingController>().Move();
+		} else {
+		
+			
+		}
+
+		GameController.Instance.NextStep ();
+		//Player.Instance.GetComponent<MovingController> ().Move ();
     }
 
     protected virtual void LateUpdate()
     {
-        if (health == 0)
+        if (health <= 0)
         {
             Destroy(this.gameObject);
         }
