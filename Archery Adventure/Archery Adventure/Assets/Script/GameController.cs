@@ -45,49 +45,42 @@ public class GameController : MonoBehaviour {
 
 	void InitGame(){
 	
-		//set first position player
+		//Init Stairs
 		StairController.Instance.InitStairs();
+		//Set first position player
 		player.GetComponent<MovingController> ().InitMoving ();
 
-		InitEnemy ();
+		//init Enemy
+		for (int i = 0; i < sumEnemy; i++) {
 
+			Enemy enemy = Instantiate (Resources.Load<GameObject>("Prefabs/Enemy/Tree"), StairController.Instance.transform).GetComponent<Enemy>();
+			enemy.transform.position = new Vector2 (-100, -100);
+			enemy.gameObject.SetActive (false);
+			listEnemy.Add (enemy);
+		}
 
-		StartGame ();
 	}
 
 	public void StartGame(){
-	
 
+		//spawn enemy for player shooted
 		SpawnEnemy ();
-
-		//
-		//player.GetComponent<MovingController> ().Move();
 	}
 
 	public void NextStep(){
 		
 		player.GetComponent<MovingController> ().Move ();
 	}
-	void InitEnemy(){
-	
-		for (int i = 0; i < sumEnemy; i++) {
 		
-			Enemy enemy = Instantiate (Resources.Load<GameObject>("Prefabs/Enemy/Tree"), StairController.Instance.transform).GetComponent<Enemy>();
-			enemy.transform.position = new Vector2 (-100, -100);
-			enemy.gameObject.SetActive (false);
-			listEnemy.Add (enemy);
-		}
-	}
-
 	void SpawnEnemy(){
 
 		Vector2 posSpawn = StairController.Instance.ListTrackPoint [++curStairEnemy];
-
 		Enemy ene = listEnemy [curEnemy];
 		ene.gameObject.SetActive (true);
 		ene.transform.position = new Vector2 (Static.MinX - 1f, posSpawn.y + 0.5f);
-		ene.transform.DOMoveX (posSpawn.x, 1f, false);
 		ene.GetComponent<MovingController> ().dir *= -1;
 		ene.GetComponent<MovingController> ().curIdTrack = player.GetComponent<MovingController> ().curIdTrack+1;
+
+		ene.transform.DOMoveX (posSpawn.x, 1.5f, false);
 	}
 }

@@ -22,8 +22,8 @@ public class Stair : MonoBehaviour {
 	void OnBecameInvisible()
 	{
 		//gameObject.SetActive (false);
-		if (callBackHiddent != null)
-			callBackHiddent ();
+//		if (callBackHiddent != null)
+//			callBackHiddent ();
 	}
 
 	public Vector2 StartPoint{
