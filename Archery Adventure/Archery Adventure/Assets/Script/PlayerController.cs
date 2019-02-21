@@ -29,17 +29,11 @@ public class PlayerController : MonoBehaviour
         GameObject temp = GameObject.Find("power_measure_text");
         powerText = temp.GetComponent<Text>();
         GameObject temp2 = GameObject.Find("angle_measure_text");
-        angleText = temp2.GetComponent<Text>();
-        
+        angleText = temp2.GetComponent<Text>();        
     }
     void Start()
     {
-        damage = GetComponent<Player>().GetDamage();
-        powerMeasurement = 0;
-        angleMeasurement = 0;
-        lineCheck = gameObject.AddComponent<LineRenderer>();
-        lineCheck.SetWidth(0.05f, 0.05f);
-        lineCheck.SetVertexCount(2);
+        SetUpPlayerControl();
     }
 
     // Update is called once per frame
@@ -146,6 +140,16 @@ public class PlayerController : MonoBehaviour
     {
         powerText.text = powerMeasurement.ToString("F0");
         angleText.text = angleMeasurement.ToString("F0") +  "°";
+    }
+
+    void SetUpPlayerControl()
+    {
+        damage = GetComponent<Player>().GetDamage();
+        powerMeasurement = 0;
+        angleMeasurement = 0;
+        lineCheck = gameObject.AddComponent<LineRenderer>();
+        lineCheck.SetWidth(0.05f, 0.05f);
+        lineCheck.SetVertexCount(2);
     }
 }
 
