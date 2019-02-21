@@ -20,12 +20,7 @@ public class EnemyBullet : MonoBehaviour {
     }
     void Start()
     {
-        Vector3 pos1 = player.transform.position;
-        Vector3 pos2 = transform.position;
-        direction = Vector3.Normalize(pos1 - pos2);
-        float angleMeasurement =
-               Quaternion.FromToRotation(transform.right, player.transform.position - transform.position).eulerAngles.z + 100;
-        this.transform.rotation = Quaternion.AngleAxis(angleMeasurement, Vector3.forward);
+        SetUpArrow();
     }
 
     // Update is called once per frame
@@ -58,5 +53,15 @@ public class EnemyBullet : MonoBehaviour {
         transform.parent = col.transform;
         Destroy(GetComponent<Rigidbody2D>());
         Destroy(GetComponent<Collider2D>());
+    }
+
+    void SetUpArrow()
+    {
+        Vector3 pos1 = player.transform.position;
+        Vector3 pos2 = transform.position;
+        direction = Vector3.Normalize(pos1 - pos2);
+        float angleMeasurement =
+               Quaternion.FromToRotation(transform.right, player.transform.position - transform.position).eulerAngles.z + 100;
+        this.transform.rotation = Quaternion.AngleAxis(angleMeasurement, Vector3.forward);
     }
 }

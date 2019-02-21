@@ -34,12 +34,7 @@ public class PlayerController : MonoBehaviour
 //    }
     void Start()
     {
-        damage = GetComponent<Player>().GetDamage();
-        powerMeasurement = 0;
-        angleMeasurement = 0;
-        lineCheck = gameObject.AddComponent<LineRenderer>();
-        lineCheck.SetWidth(0.05f, 0.05f);
-        lineCheck.SetVertexCount(2);
+        SetUpPlayerControl();
 		//lineCheck.SetPosition ();
     }
 
@@ -147,6 +142,16 @@ public class PlayerController : MonoBehaviour
     {
         powerText.text = powerMeasurement.ToString("F0");
         angleText.text = angleMeasurement.ToString("F0") +  "°";
+    }
+
+    void SetUpPlayerControl()
+    {
+        damage = GetComponent<Player>().GetDamage();
+        powerMeasurement = 0;
+        angleMeasurement = 0;
+        lineCheck = gameObject.AddComponent<LineRenderer>();
+        lineCheck.SetWidth(0.05f, 0.05f);
+        lineCheck.SetVertexCount(2);
     }
 }
 
