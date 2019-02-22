@@ -15,7 +15,6 @@ public class EnemyBullet : Bullet {
 				collision.gameObject.GetComponent<PlayerController>().TakeDamage(damage);
 				ArrowStick(collision);
 				hit = true;
-
 				PlayerController.Instance.CanShooting = true;
 			}
 		}
