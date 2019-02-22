@@ -85,14 +85,7 @@ public class GameController : MonoBehaviour {
 	public void EnemyAttack(){
 	
 		Enemy ene = listEnemy [curEnemy];
-		PlayerController.Instance.CanShooting = true;
-		//StartCoroutine (SetCanShooting());
 		ene.Attack ();
 	}
 
-	IEnumerator SetCanShooting(){
-
-		yield return new WaitForSeconds(1f);
-		PlayerController.Instance.CanShooting = true;
-	}
 }
