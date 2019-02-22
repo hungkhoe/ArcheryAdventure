@@ -68,7 +68,7 @@ public class MovingController : MonoBehaviour {
 		isMoving = true;
 	}
 
-	void SetFlipX(){
+	public void SetFlipX(){
 
 		if (dir > 0)
 			transform.localScale = new Vector3(1f, transform.localScale.y, transform.localScale.z);

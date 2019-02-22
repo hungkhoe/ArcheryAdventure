@@ -36,7 +36,7 @@ public class StairController : MonoBehaviour
 	public void InitStairs (int sumEnemy = 20)
 	{
 
-		isLeft = true;
+		isLeft = false;
 		listStair = new List<Stair> ();
 		listTrackPoint = new List<Vector2> ();
 
@@ -158,6 +158,12 @@ public class StairController : MonoBehaviour
 			
 		transform.DOMoveY (transform.position.y - disMove, 1f, false);
 		UpdateLightStair ();
+
+		listTrackPoint [0] = new Vector2 (listTrackPoint[0].x, listTrackPoint[0].y-disMove);
+		for (int i = 0; i < listStair.Count; i++) {
+
+			listTrackPoint [i] = new Vector2 (listTrackPoint [i].x,listTrackPoint[i].y-disMove );
+		}
 	}
 
 	public List<Stair> ListStair {
