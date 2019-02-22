@@ -14,8 +14,7 @@ public class Bullet : MonoBehaviour {
     protected bool hit = false;
     private void Awake()
     {
-        player = GameObject.Find("Player");
-        Physics2D.IgnoreCollision(player.gameObject.GetComponent<Collider2D>(), GetComponent<Collider2D>());        
+        player = GameObject.Find("Player");            
         rigid = GetComponent<Rigidbody2D>();
         col2d = GetComponent<Collider2D>();
     }

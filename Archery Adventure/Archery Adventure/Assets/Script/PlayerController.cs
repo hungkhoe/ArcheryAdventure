@@ -34,6 +34,7 @@ public class PlayerController : MonoBehaviour
 	bool isTestMovement;
 	Vector3 testingHeading; 
 	float storePower;
+    [SerializeField]
 	bool canShooting;
 	static PlayerController instance;
 	public static PlayerController Instance{

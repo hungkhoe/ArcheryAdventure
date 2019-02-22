@@ -25,7 +25,13 @@ public class GameController : MonoBehaviour {
 	void Awake(){
 	
 		instance = this;
-	}
+        //Physics2D.IgnoreLayerCollision(12, 11);
+        //Physics2D.IgnoreLayerCollision(13, 10);
+        //Physics2D.IgnoreLayerCollision(12, 8);
+        //Physics2D.IgnoreLayerCollision(13, 8);
+        //Physics2D.IgnoreLayerCollision(12, 9);
+        //Physics2D.IgnoreLayerCollision(13, 9);
+    }
 	void Start () {
 
 		sumEnemy = 10;
@@ -85,6 +91,8 @@ public class GameController : MonoBehaviour {
 	public void EnemyAttack(){
 	
 		Enemy ene = listEnemy [curEnemy];
+		//PlayerController.Instance.CanShooting = true;
+		//StartCoroutine (SetCanShooting());
 		ene.Attack ();
 	}
 
