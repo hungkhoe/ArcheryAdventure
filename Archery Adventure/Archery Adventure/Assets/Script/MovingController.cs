@@ -20,6 +20,8 @@ public class MovingController : MonoBehaviour {
 	[HideInInspector]
 	public int curIdTrack;
 
+	bool isMoving;
+
 	//static MovingController instance;
 	// Use this for initialization
 	void Start () {
@@ -62,8 +64,14 @@ public class MovingController : MonoBehaviour {
 		forceMov = transform.right * dir * speedMoving;
 		rb.velocity = forceMov;
 
+		SetFlipX ();
+		isMoving = true;
+	}
+
+	void SetFlipX(){
+
 		if (dir > 0)
-			transform.localScale= new Vector3(1f, transform.localScale.y, transform.localScale.z);
+			transform.localScale = new Vector3(1f, transform.localScale.y, transform.localScale.z);
 		else
 			transform.localScale = new Vector3(-1f, transform.localScale.y, transform.localScale.z);
 	}
@@ -86,9 +94,8 @@ public class MovingController : MonoBehaviour {
 					rb.velocity = new Vector2(0,rb.velocity.y);
 					//turn around direction
 					dir *= -1;
-
-					if(name.Equals("Player"))
-						StairController.Instance.MoveDownStair ();
+					SetFlipX();
+					isMoving = false;
 				});
 				
 			} else {
@@ -122,4 +129,11 @@ public class MovingController : MonoBehaviour {
 		}
 	}
 		
+	public bool IsMoving{
+
+		get{ 
+		
+			return isMoving;
+		}
+	}
 }

@@ -72,8 +72,17 @@ public class GameController : MonoBehaviour {
 
 	public void NextStep(){
 
-		PlayerController.Instance.CanShooting = true;
+		StartCoroutine (StartNextStep());
+	}
+		
+	IEnumerator StartNextStep(){
+
+		yield return new WaitForSeconds (0.5f);
 		PlayerController.Instance.GetComponent<MovingController> ().Move ();
+
+		yield return new WaitUntil (()=>!listEnemy[curEnemy].GetComponent<MovingController>().IsMoving && !PlayerController.Instance.GetComponent<MovingController>().IsMoving);
+		StairController.Instance.MoveDownStair ();
+		PlayerController.Instance.CanShooting = true;
 	}
 		
 	void SpawnEnemy(){

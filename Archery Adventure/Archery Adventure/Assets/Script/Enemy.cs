@@ -49,7 +49,11 @@ public class Enemy : MonoBehaviour {
 		target = new Vector3 (target.x, target.y + Static.HEIGHT_PLAYER/2 + Random.Range(Static.ENEMY_MIN_HEIGHT_AIM, Static.ENEMY_MAX_HEIGHT_AIM), target.z);
 		//float randX = Random.Range ();
 
-		float angle = Mathf.Atan2(bow.transform.position.y-target.y,bow.transform.position.x-target.x)*180 / Mathf.PI - 180;
+		float angle = 0;
+		if(GetComponent<MovingController>().dir>0)
+			angle = Mathf.Atan2(bow.transform.position.y - target.y,bow.transform.position.x - target.x)*180 / Mathf.PI - 180;
+		else angle = Mathf.Atan2(bow.transform.position.y - target.y,bow.transform.position.x - target.x)*180 / Mathf.PI;
+
 		bow.transform.rotation = Quaternion.Euler (bow.transform.rotation.x, bow.transform.rotation.y, bow.transform.rotation.z + angle);
 
 		GameObject arrow = Instantiate(prefab_enemyArrow);
@@ -75,6 +79,7 @@ public class Enemy : MonoBehaviour {
 		if (health > 0) {
 
 			GetComponent<MovingController>().Move();
+			GameController.Instance.NextStep ();
 		} else {
 		
 			

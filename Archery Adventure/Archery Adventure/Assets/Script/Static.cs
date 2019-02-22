@@ -6,9 +6,9 @@ using System;
 public static class Static
 {
 	public static float HEIGHT_PLAYER = 0.8f;
-	public static float ENEMY_MAX_HEIGHT_AIM = 7f;
-	public static float ENEMY_MIN_HEIGHT_AIM = 2f;
-	public static float ENEMY_MAX_POWER = 40f;
+	public static float ENEMY_MAX_HEIGHT_AIM = 3f;
+	public static float ENEMY_MIN_HEIGHT_AIM = 3f;
+	public static float ENEMY_MAX_POWER = 45f;
 
     public static string strPathSavedData
     {
