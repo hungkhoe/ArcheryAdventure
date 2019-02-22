@@ -5,20 +5,10 @@ using System;
 
 public static class Static
 {
-    public const int maxLevel = 96;
-    public const int maxEvolve = 2;
-    public const float barrierArmLength = 2.5f;
-#if UNITY_EDITOR || UNITY_STANDALONE
-    public const KeyCode escape = KeyCode.A;
-#else
-    public const KeyCode escape = KeyCode.Escape;
-#endif
-    public static bool testMode = false;
-    public static bool useCheatData = false;
-    public static bool useCustomOffers = true;
-    public static bool useRating = true;
-
-    public static string abtestingKey = "mobhpmod";
+	public static float HEIGHT_PLAYER = 0.8f;
+	public static float ENEMY_MAX_HEIGHT_AIM = 7f;
+	public static float ENEMY_MIN_HEIGHT_AIM = 2f;
+	public static float ENEMY_MAX_POWER = 40f;
 
     public static string strPathSavedData
     {

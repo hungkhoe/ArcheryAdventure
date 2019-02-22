@@ -9,9 +9,6 @@ public class GameController : MonoBehaviour {
 	[SerializeField]
 	GameObject enemy;
 
-	[SerializeField]
-	Player player;
-
 	int sumEnemy;
 	int curStairEnemy;
 	List<Enemy> listEnemy;
@@ -48,12 +45,12 @@ public class GameController : MonoBehaviour {
 		//Init Stairs
 		StairController.Instance.InitStairs();
 		//Set first position player
-		player.GetComponent<MovingController> ().InitMoving ();
+		PlayerController.Instance.GetComponent<MovingController> ().InitMoving ();
 
 		//init Enemy
 		for (int i = 0; i < sumEnemy; i++) {
 
-			Enemy enemy = Instantiate (Resources.Load<GameObject>("Prefabs/Enemy/Tree"), StairController.Instance.transform).GetComponent<Enemy>();
+			Enemy enemy = Instantiate (Resources.Load<GameObject>("Prefabs/Enemy/Enemy"), StairController.Instance.transform).GetComponent<Enemy>();
 			enemy.transform.position = new Vector2 (-100, -100);
 			enemy.gameObject.SetActive (false);
 			listEnemy.Add (enemy);
@@ -68,8 +65,9 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void NextStep(){
-		
-		player.GetComponent<MovingController> ().Move ();
+
+		PlayerController.Instance.CanShooting = true;
+		PlayerController.Instance.GetComponent<MovingController> ().Move ();
 	}
 		
 	void SpawnEnemy(){
@@ -79,8 +77,22 @@ public class GameController : MonoBehaviour {
 		ene.gameObject.SetActive (true);
 		ene.transform.position = new Vector2 (Static.MinX - 1f, posSpawn.y + 0.5f);
 		ene.GetComponent<MovingController> ().dir *= -1;
-		ene.GetComponent<MovingController> ().curIdTrack = player.GetComponent<MovingController> ().curIdTrack+1;
+		ene.GetComponent<MovingController> ().curIdTrack = PlayerController.Instance.GetComponent<MovingController> ().curIdTrack+1;
 
 		ene.transform.DOMoveX (posSpawn.x, 1.5f, false);
+	}
+
+	public void EnemyAttack(){
+	
+		Enemy ene = listEnemy [curEnemy];
+		PlayerController.Instance.CanShooting = true;
+		//StartCoroutine (SetCanShooting());
+		ene.Attack ();
+	}
+
+	IEnumerator SetCanShooting(){
+
+		yield return new WaitForSeconds(1f);
+		PlayerController.Instance.CanShooting = true;
 	}
 }

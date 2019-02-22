@@ -8,32 +8,50 @@ public class PlayerController : MonoBehaviour
     // Use this for initialization
     [SerializeField]
     bool isHolding, isDestroyingDotTest;
+
     [SerializeField]
     GameObject prefab_DotTest,prefab_bulletTest;
-    [SerializeField]
+
+    //[SerializeField]
     GameObject[] dot_testArray;
+
     [SerializeField]
     float powerMeasurement, angleMeasurement;
-    LineRenderer lineCheck;
-    Text powerText,angleText;
 
-    bool isTestMovement;
-    Vector3 testingHeading; 
-    float storePower;
+	[SerializeField]
+	GameObject bow;
+
+	[SerializeField]
+	int health;
+
     [SerializeField]
-    int damage;
     bool isShooting = false;
 
-//    private void Awake()
-//    {        
-//        GameObject temp = GameObject.Find("power_measure_text");
-//        powerText = temp.GetComponent<Text>();
-//        GameObject temp2 = GameObject.Find("angle_measure_text");
-//        angleText = temp2.GetComponent<Text>();
-//        
-//    }
+	Text health_Text;
+	int damage;
+	LineRenderer lineCheck;
+	Text powerText,angleText;
+	bool isTestMovement;
+	Vector3 testingHeading; 
+	float storePower;
+	bool canShooting;
+	static PlayerController instance;
+	public static PlayerController Instance{
+
+		get{
+
+			return instance;
+		}
+	}
+	void Awake(){
+
+		instance = this;
+	}
+
     void Start()
     {
+		canShooting = true;
+		CreateCircleDistance ();
         SetUpPlayerControl();
 		//lineCheck.SetPosition ();
     }
@@ -45,48 +63,81 @@ public class PlayerController : MonoBehaviour
 //        UI_Update();        
     }
 
+
+	public void TakeDamage(int _damage)
+	{
+		health -= _damage;
+	}
+	public int GetDamage()
+	{
+		return damage;
+	}
+
+	public int GetHealth()
+	{
+		return health;
+	}
+
     void PlayerControl()
     {
-        if (Input.GetMouseButton(0))
-        {
-            isHolding = true;
-            isDestroyingDotTest = true;
-            AdjustFirePower();
-        }
-        else
-        {
-            if (isHolding == true)
-            {
-                isHolding = false;
-                if (isDestroyingDotTest)
-                {
-                    ClearDotTest();
-                }
-            }
-        }
+		if (canShooting) {
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            CreateCircleDistance();
-            Debug.Log("test");
-        }        
+			if (Input.GetMouseButtonDown (0)) {
+			
+
+				Vector3 startPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+				startPoint.z = 15;
+				dot_testArray [0].transform.position = startPoint;
+			}
+
+			if (Input.GetMouseButton (0)) {
+				isHolding = true;
+				isDestroyingDotTest = true;
+				AdjustFirePower ();
+
+			} else {
+				if (isHolding == true) {
+					isHolding = false;
+					if (isDestroyingDotTest) {
+						ClearDotTest ();
+					}
+				}
+			}
+				
+		}
     }
+
+	public bool CanShooting{
+
+		set{ 
+		
+			canShooting = value;
+		}
+	}
 
     void CreateCircleDistance()
     {
-        for (int i = 0; i < dot_testArray.Length; i++)
-        {
-            dot_testArray[i] = Instantiate(prefab_DotTest);
-            Vector3 convertPositon = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            convertPositon.z = 15;
-            dot_testArray[i].transform.position = convertPositon;
-        }
+		if (dot_testArray == null) {
+		
+			dot_testArray = new GameObject[2];
+
+			for (int i = 0; i < 2; i++) {
+				dot_testArray [i] = Instantiate (prefab_DotTest);
+				Vector3 convertPositon = Camera.main.ScreenToWorldPoint (Input.mousePosition);
+				convertPositon.z = 15;
+				dot_testArray [i].transform.position = convertPositon;
+			}
+		}
+   
     }
 
-    void AdjustFirePower()
+	void AdjustFirePower()
     {
         if (dot_testArray[1] != null)
         {
+			dot_testArray[0].SetActive(true);
+			dot_testArray[1].SetActive(true);
+
             lineCheck.enabled = true;
             Vector3 convertPositon = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             convertPositon.z = 15;
@@ -106,7 +157,10 @@ public class PlayerController : MonoBehaviour
             if (powerMeasurement >= 100)
             {
                 powerMeasurement = 100;
-            }       
+            }   
+
+			float angle = Mathf.Atan2(dot_testArray[1].transform.position.y-dot_testArray[0].transform.position.y, dot_testArray[1].transform.position.x-dot_testArray[0].transform.position.x)*180 / Mathf.PI - 180;
+			bow.transform.rotation = Quaternion.Euler (bow.transform.rotation.x, bow.transform.rotation.y, bow.transform.rotation.z + angle);
         }
     }    
 
@@ -114,7 +168,7 @@ public class PlayerController : MonoBehaviour
     {
         for (int i = 0; i < dot_testArray.Length; i++)
         {
-            Destroy(dot_testArray[i]);
+			dot_testArray[i].SetActive(false);
         }
 
         Vector3 pos1 = dot_testArray[0].transform.position;
@@ -126,11 +180,12 @@ public class PlayerController : MonoBehaviour
         if(Vector3.Distance(dot_testArray[0].transform.position, dot_testArray[1].transform.position) > 1)
         {
             GameObject temp = Instantiate(prefab_bulletTest);
-            Bullet prefabBullet = temp.GetComponent<Bullet>();
+			PlayerBullet prefabBullet = temp.GetComponent<PlayerBullet>();
             prefabBullet.SetDamage(damage);
             prefabBullet.SetRotationAngle(angleMeasurement);
             prefabBullet.SetPowerDirection(powerMeasurement, testingHeading);
-            temp.transform.position = this.transform.position;
+			temp.transform.position = bow.transform.position;
+			canShooting = false;
         }    
 
         lineCheck.enabled = false;
@@ -146,12 +201,20 @@ public class PlayerController : MonoBehaviour
 
     void SetUpPlayerControl()
     {
-        damage = GetComponent<Player>().GetDamage();
+        damage = GetDamage();
         powerMeasurement = 0;
         angleMeasurement = 0;
         lineCheck = gameObject.AddComponent<LineRenderer>();
         lineCheck.SetWidth(0.05f, 0.05f);
         lineCheck.SetVertexCount(2);
     }
+
+	public int DirectPlayer{
+
+		get{ 
+
+			return GetComponent<MovingController> ().dir;
+		}
+	}
 }
 

@@ -146,7 +146,7 @@ public class StairController : MonoBehaviour
 	{
 	
 		float disBelowZeroPos = 1f;
-		Vector2 curPlayer = Player.Instance.gameObject.transform.position;
+		Vector2 curPlayer = PlayerController.Instance.gameObject.transform.position;
 		float disMove = 0;
 		if (curPlayer.y > 0) {
 		

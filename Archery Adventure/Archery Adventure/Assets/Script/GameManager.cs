@@ -11,9 +11,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     Button winningButton;
     [SerializeField]
-    Enemy[] monsterInScene;
-    [SerializeField]
-    Player playerScript;
+    Enemy[] monsterInScene;  
 
     bool isWinning,isLosing;
 
@@ -23,7 +21,6 @@ public class GameManager : MonoBehaviour {
         Physics2D.IgnoreLayerCollision(10, 11);
         Physics2D.IgnoreLayerCollision(8, 10);
         GameObject temp = GameObject.Find("Player");
-        playerScript = temp.GetComponent<Player>();
     }
     void Start () {
         monsterInScene = FindObjectsOfType<Enemy>();
@@ -35,7 +32,7 @@ public class GameManager : MonoBehaviour {
         {
             winningPanel.SetActive(true);
         }
-        else if (playerScript.GetHealth() <= 0 )
+		else if (PlayerController.Instance.GetHealth() <= 0 )
         {
             isLosing = true;    
             if(isLosing)

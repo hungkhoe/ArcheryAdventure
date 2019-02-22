@@ -10,8 +10,8 @@ public class Bullet : MonoBehaviour {
     Collider2D col2d;
     float power;
     GameObject player;
-    int damage;
-    bool hit = false;
+    protected int damage;
+    protected bool hit = false;
     private void Awake()
     {
         player = GameObject.Find("Player");
@@ -23,12 +23,14 @@ public class Bullet : MonoBehaviour {
         
     }
 
-    private void LateUpdate()
+	protected virtual void LateUpdate()
     {
         Vector3 screenPoint = Camera.main.WorldToViewportPoint(transform.position);
         if(screenPoint.x > 1 || screenPoint.y < 0)
         {
             Destroy(this.gameObject);
+
+			//GameController.Instance.EnemyAttack ();
         }     
     }
 
@@ -54,9 +56,9 @@ public class Bullet : MonoBehaviour {
         rigid.velocity = direction * power / 6.5F;
     }  
   
-    private void OnTriggerEnter2D(Collider2D collision)
+	protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Enemy")
+        if (collision.gameObject.tag == "Player")
         {
             if (!hit)
             {
@@ -72,7 +74,7 @@ public class Bullet : MonoBehaviour {
         damage = _damage;
     }
 
-    void ArrowStick(Collider2D col)
+    protected void ArrowStick(Collider2D col)
     {       
         transform.parent = col.transform;        
         Destroy(rigid);
