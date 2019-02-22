@@ -204,7 +204,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f84e05318e7a7bf43a91d678a93c6ff5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 2
+  health: 1
   damage: 1
   prefab_enemyArrow: {fileID: 1394739047719656, guid: 3d108973cc6606f45b0f8244996554a8,
     type: 2}

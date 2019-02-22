@@ -66,7 +66,8 @@ public class GameController : MonoBehaviour {
 
 	public void StartGame(){
 
-		//spawn enemy for player shooted
+        //spawn enemy for player shooted
+        curEnemy = -1;
 		SpawnEnemy ();
 	}
 
@@ -85,10 +86,10 @@ public class GameController : MonoBehaviour {
 		PlayerController.Instance.CanShooting = true;
 	}
 		
-	void SpawnEnemy(){
+	public void SpawnEnemy(){
 
 		Vector2 posSpawn = StairController.Instance.ListTrackPoint [++curStairEnemy];
-		Enemy ene = listEnemy [curEnemy];
+		Enemy ene = listEnemy [++curEnemy];
 		ene.gameObject.SetActive (true);
 		ene.transform.position = new Vector2 (Static.MinX - 1f, posSpawn.y + 0.5f);
 		ene.GetComponent<MovingController> ().dir *= -1;

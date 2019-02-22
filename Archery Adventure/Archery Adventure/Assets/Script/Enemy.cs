@@ -77,7 +77,6 @@ public class Enemy : MonoBehaviour {
     {
         health -= _damage;
 		if (health > 0) {
-
 			GetComponent<MovingController>().Move();
 			GameController.Instance.NextStep ();
 		} else {
@@ -85,15 +84,19 @@ public class Enemy : MonoBehaviour {
 			
 		}
 
-		//GameController.Instance.NextStep ();
+        if(health <= 0)
+        {
+            Destroy(this.gameObject);
+            GameController.Instance.SpawnEnemy();
+            GameController.Instance.NextStep();
+        }
+
+        //GameController.Instance.NextStep ();
     }
 
     protected virtual void LateUpdate()
     {
-        if (health <= 0)
-        {
-            Destroy(this.gameObject);
-        }
+        
     }
 
     public void SetShootingBool(bool _isShooting)

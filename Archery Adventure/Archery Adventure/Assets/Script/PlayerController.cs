@@ -51,7 +51,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-		canShooting = true;
+        InitPlayer();	
 		CreateCircleDistance ();
         SetUpPlayerControl();
 		//lineCheck.SetPosition ();
@@ -220,5 +220,11 @@ public class PlayerController : MonoBehaviour
 			return GetComponent<MovingController> ().dir;
 		}
 	}
+
+    void InitPlayer()
+    {
+        canShooting = true;
+        damage = 1;
+    }
 }
 
