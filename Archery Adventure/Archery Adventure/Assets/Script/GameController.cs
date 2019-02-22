@@ -96,9 +96,4 @@ public class GameController : MonoBehaviour {
 		ene.Attack ();
 	}
 
-	IEnumerator SetCanShooting(){
-
-		yield return new WaitForSeconds(1f);
-		PlayerController.Instance.CanShooting = true;
-	}
 }
