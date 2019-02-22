@@ -50,6 +50,11 @@ public class MovingController : MonoBehaviour {
 			dir = 1;
 		
 		curIdTrack = 0;
+
+		if (dir > 0)
+			transform.localScale= new Vector3(1f, transform.localScale.y, transform.localScale.z);
+		else
+			transform.localScale = new Vector3(-1f, transform.localScale.y, transform.localScale.z);
 	}
 
 	public void Move(){
