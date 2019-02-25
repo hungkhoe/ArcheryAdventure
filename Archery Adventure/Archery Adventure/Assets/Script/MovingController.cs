@@ -108,8 +108,6 @@ public class MovingController : MonoBehaviour {
 			}
 				
 		}
-
-
 		//StartCoroutine (TestMove());
 	}
 

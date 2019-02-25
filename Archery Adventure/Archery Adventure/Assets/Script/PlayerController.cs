@@ -8,22 +8,16 @@ public class PlayerController : MonoBehaviour
     // Use this for initialization
     [SerializeField]
     bool isHolding, isDestroyingDotTest;
-
     [SerializeField]
     GameObject prefab_DotTest, prefab_bulletTest;
-
     //[SerializeField]
     GameObject[] dot_testArray;
-
     [SerializeField]
     float powerMeasurement, angleMeasurement;
-
     [SerializeField]
     GameObject bow;
-
     [SerializeField]
     int health;
-
     [SerializeField]
     bool isShooting = false;
 
@@ -75,6 +69,7 @@ public class PlayerController : MonoBehaviour
             UIController.Instance.SetLosing(true);
             isLosing = true;
         }
+        Debug.Log(health);
     }
 
 
