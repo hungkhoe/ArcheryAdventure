@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
     bool isHolding, isDestroyingDotTest;
 
     [SerializeField]
-    GameObject prefab_DotTest,prefab_bulletTest;
+    GameObject prefab_DotTest, prefab_bulletTest;
 
     //[SerializeField]
     GameObject[] dot_testArray;
@@ -18,50 +18,63 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     float powerMeasurement, angleMeasurement;
 
-	[SerializeField]
-	GameObject bow;
+    [SerializeField]
+    GameObject bow;
 
-	[SerializeField]
-	int health;
+    [SerializeField]
+    int health;
 
     [SerializeField]
     bool isShooting = false;
 
-	Text health_Text;
-	int damage;
-	LineRenderer lineCheck;
-	Text powerText,angleText;
-	bool isTestMovement;
-	Vector3 testingHeading; 
-	float storePower;
+    Text health_Text;
+    int damage;
+    LineRenderer lineCheck;
+    Text powerText, angleText;
+    bool isTestMovement;
+    Vector3 testingHeading;
+    float storePower;
     [SerializeField]
-	bool canShooting;
-	static PlayerController instance;
-	public static PlayerController Instance{
+    bool canShooting;
+    static PlayerController instance;
+    bool IsGameStart, isLosing, isWinning;
+    public static PlayerController Instance {
 
-		get{
+        get {
 
-			return instance;
-		}
-	}
-	void Awake(){
+            return instance;
+        }
+    }
+    void Awake() {
 
-		instance = this;
-	}
+        instance = this;
+    }
 
     void Start()
     {
-        InitPlayer();	
-		CreateCircleDistance ();
+        InitPlayer();
+        CreateCircleDistance();
         SetUpPlayerControl();
-		//lineCheck.SetPosition ();
+        //lineCheck.SetPosition ();
     }
 
     // Update is called once per frame
     void Update()
     {
-        PlayerControl();
-//        UI_Update();        
+        if (isLosing || isWinning)
+        {
+        
+        }
+        else if (IsGameStart)
+        {
+            PlayerControl();
+        } 
+        //       
+        if (health <= 0)
+        {
+            UIController.Instance.SetLosing(true);
+            isLosing = true;
+        }
     }
 
 
@@ -225,6 +238,21 @@ public class PlayerController : MonoBehaviour
     {
         canShooting = true;
         damage = 1;
+        health = 3;
+    }
+
+    public void SetGameStart()
+    {
+        IsGameStart = true;
+    }
+
+    public void SetLosing()
+    {
+        isLosing = true;
+    }
+    public void SetWinning()
+    {
+        isWinning = true;
     }
 }
 

@@ -8,13 +8,16 @@ public class GameController : MonoBehaviour {
 	// Use this for initialization
 	[SerializeField]
 	GameObject enemy;
+    [SerializeField]
+    GameObject losingPanel, winningPanel;
 
+    bool isNotDead;
 	int sumEnemy;
 	int curStairEnemy;
 	List<Enemy> listEnemy;
 	int curEnemy;
 	static GameController instance;
-
+   
 	public static GameController Instance{
 
 		get{ 
@@ -34,16 +37,15 @@ public class GameController : MonoBehaviour {
     }
 	void Start () {
 
-		sumEnemy = 10;
+		sumEnemy = 3;
 		curStairEnemy = 0;
 		listEnemy = new List<Enemy> ();
-
+        bool isNotDead = false;
 		InitGame ();
 	}
 	
 	// Update is called once per frame
-	void Update () {
-		
+	void Update () {      
 	}
 
 	void InitGame(){
@@ -53,14 +55,33 @@ public class GameController : MonoBehaviour {
 		//Set first position player
 		PlayerController.Instance.GetComponent<MovingController> ().InitMoving ();
 
-		//init Enemy
-		for (int i = 0; i < sumEnemy; i++) {
+        //init Enemy
+        for (int i = 0; i < sumEnemy; i++) {
 
-			Enemy enemy = Instantiate (Resources.Load<GameObject>("Prefabs/Enemy/Enemy"), StairController.Instance.transform).GetComponent<Enemy>();
-			enemy.transform.position = new Vector2 (-100, -100);
-			enemy.gameObject.SetActive (false);
-			listEnemy.Add (enemy);
-		}
+            if (i == 0)
+            {
+                NormalEnemy enemy = Instantiate(Resources.Load<GameObject>("Prefabs/Enemy/Normal_Enemy"), StairController.Instance.transform).GetComponent<NormalEnemy>();
+                enemy.transform.position = new Vector2(-100, -100);
+                enemy.gameObject.SetActive(false);
+                listEnemy.Add(enemy);
+            }
+            else if (i == 1)
+            {
+                MidEnemy enemy = Instantiate(Resources.Load<GameObject>("Prefabs/Enemy/Medium_Enemy"), StairController.Instance.transform).GetComponent<MidEnemy>();
+                enemy.transform.position = new Vector2(-100, -100);
+                enemy.gameObject.SetActive(false);
+                listEnemy.Add(enemy);
+            }
+
+            else if (i == 2)
+            {
+                Boss enemy = Instantiate(Resources.Load<GameObject>("Prefabs/Enemy/Boss"), StairController.Instance.transform).GetComponent<Boss>();
+                enemy.transform.position = new Vector2(-100, -100);
+                enemy.gameObject.SetActive(false);
+                listEnemy.Add(enemy);
+            }       
+
+        }
 
 	}
 
@@ -68,7 +89,7 @@ public class GameController : MonoBehaviour {
 
         //spawn enemy for player shooted
         curEnemy = -1;
-		//curStairEnemy = 1;
+		curStairEnemy = 0;
 		SpawnEnemy ();
 	}
 
@@ -85,33 +106,48 @@ public class GameController : MonoBehaviour {
 		yield return new WaitUntil (()=>!listEnemy[curEnemy].GetComponent<MovingController>().IsMoving && !PlayerController.Instance.GetComponent<MovingController>().IsMoving);
 		StairController.Instance.MoveDownStair ();
 		PlayerController.Instance.CanShooting = true;
+
+        if(isNotDead)
+        {
+            curStairEnemy++;
+            isNotDead = false;
+        }      
 	}
 		
-	public void SpawnEnemy(){
-
-		Vector2 posSpawn = StairController.Instance.ListTrackPoint [++curStairEnemy];
+	public void SpawnEnemy() {     
+        Vector2 posSpawn = StairController.Instance.ListTrackPoint [++curStairEnemy];
 		Enemy ene = listEnemy [++curEnemy];
 		ene.gameObject.SetActive (true);
 
-		ene.GetComponent<MovingController> ().dir = posSpawn.x>0 ? -1 : 1;
+        if(posSpawn.x > 0)
+        {
+            ene.GetComponent<MovingController>().dir = -1;
+        }
+        else
+        {
+            ene.GetComponent<MovingController>().dir = 1;
+        }		
 		ene.GetComponent<MovingController> ().SetFlipX ();
 		ene.GetComponent<MovingController> ().curIdTrack = PlayerController.Instance.GetComponent<MovingController> ().curIdTrack+1;
 
-		if (ene.GetComponent<MovingController> ().dir > 0) {
-		
-			ene.transform.position = new Vector2 (Static.MinX - 1f, posSpawn.y + 0.5f);
-		}
-		else ene.transform.position = new Vector2 (Static.MaxX + 1f, posSpawn.y + 0.5f);
+        if (ene.GetComponent<MovingController>().dir > 0)
+        {
+            ene.transform.position = new Vector2(Static.MinX - 1f, posSpawn.y + 0.5f);
+        }
+        else ene.transform.position = new Vector2(Static.MaxX + 1f, posSpawn.y + 0.5f);
 
-		ene.transform.DOMoveX (posSpawn.x, 1.5f, false);
-	}
+        ene.transform.DOMoveX(posSpawn.x, 1.5f, false);    
+    }
 
 	public void EnemyAttack(){
 	
 		Enemy ene = listEnemy [curEnemy];
-		//PlayerController.Instance.CanShooting = true;
-		//StartCoroutine (SetCanShooting());
+		
 		ene.Attack ();
 	}
 
+    public void SetIsNotDead(bool _isNotDead)
+    {
+        isNotDead = _isNotDead;
+    }  
 }

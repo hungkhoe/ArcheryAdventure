@@ -16,10 +16,6 @@ public class MidEnemy : Enemy {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-        if (isShooting == false)
-        {
-            ShootArrow();
-        }
+	void Update () {        
     }
 }

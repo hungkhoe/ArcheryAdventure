@@ -73,12 +73,13 @@ public class Enemy : MonoBehaviour {
 		arrow.transform.position = bow.transform.position;
 	}
 
-    public void TakeDamage(int _damage)
+    public virtual void TakeDamage(int _damage)
     {
         health -= _damage;
 		if (health > 0) {
 			GetComponent<MovingController>().Move();
 			GameController.Instance.NextStep ();
+            GameController.Instance.SetIsNotDead(true);
 		} else {
 		
 			

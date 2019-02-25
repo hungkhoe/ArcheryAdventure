@@ -11,7 +11,7 @@ public class MovingController : MonoBehaviour {
 	[SerializeField]
 	float heightStair = 0.4f;
 
-	[HideInInspector]
+	//[HideInInspector]
 	public int dir;
 
 	Rigidbody2D rb;
@@ -26,7 +26,7 @@ public class MovingController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		dir = 1;
+		//dir = 1;
 	}
 
 	void Awake(){
@@ -88,15 +88,16 @@ public class MovingController : MonoBehaviour {
 
 			if (i == step - 1) {
 			
-				transform.DOJump (new Vector3 (endJump.x, transform.position.y + heightStair, 0), 0.5f, 1, 0.2f, false).OnComplete(()=>{
-
+				transform.DOJump (new Vector3 (transform.position.x - heightStair * (-dir), transform.position.y + heightStair, 0), 0.5f, 1, 0.2f, false).OnComplete(()=>{
+                                     
 					rb.simulated = true;
 					rb.velocity = new Vector2(0,rb.velocity.y);
-					//turn around direction
-					dir *= -1;
-					SetFlipX();
+					//turn around direction					
 					isMoving = false;
-				});
+                    dir *= -1;                 
+                    SetFlipX();
+                       
+                });
 				
 			} else {
 				

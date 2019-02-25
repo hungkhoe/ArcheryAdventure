@@ -3,12 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Boss : Enemy {
-    // Use this for initialization
-    GameManager gameManager;
+    // Use this for initialization   
     private void Awake()
-    {
-        GameObject temp = GameObject.Find("GameManger");
-        gameManager = temp.GetComponent<GameManager>();
+    {     
         player = GameObject.Find("Player");
     }
     void Start () {
@@ -18,20 +15,39 @@ public class Boss : Enemy {
 	
 	// Update is called once per frame
 	void Update () {
-        if (isShooting == false)
-        {
-            ShootArrow();
-        }
+       
     }
 
     protected override void LateUpdate()
     {
         if (health == 0)
-        {
-            gameManager.SetWinning(true);
+        {           
             Destroy(this.gameObject);
         }
     }
 
+    public override void TakeDamage(int _damage)
+    {
+        health -= _damage;
+        if (health > 0)
+        {
+            GetComponent<MovingController>().Move();
+            GameController.Instance.NextStep();
+            GameController.Instance.SetIsNotDead(true);
+        }
+        else
+        {
+
+
+        }
+
+        if (health <= 0)
+        {
+            Destroy(this.gameObject);
+            UIController.Instance.SetWinning(true);
+        }
+
+        //GameController.Instance.NextStep ();
+    }
 
 }
