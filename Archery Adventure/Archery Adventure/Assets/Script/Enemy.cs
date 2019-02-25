@@ -20,6 +20,8 @@ public class Enemy : MonoBehaviour {
 	[SerializeField]
 	GameObject bow;
 
+    float windowWidth;
+
 	protected GameObject player;
     private void Awake()
     {
@@ -27,6 +29,7 @@ public class Enemy : MonoBehaviour {
     }
     void Start () {
         isShooting = false;
+       
     }
 	
 	// Update is called once per frame
@@ -61,15 +64,16 @@ public class Enemy : MonoBehaviour {
 		prefabBullet.SetDamage(damage);
 		prefabBullet.SetRotationAngle(angle);
 
-		float power = 0;
+        windowWidth = Screen.width;
+        float power = 0;
 
 		if (PlayerController.Instance.DirectPlayer < 0) {
 		
-			power = (PlayerController.Instance.transform.position.x / Static.MaxX) * Static.ENEMY_MAX_POWER;
+			power = (PlayerController.Instance.transform.position.x / Static.MaxX) *(Static.ENEMY_MAX_POWER * (windowWidth /720));
 		} else
-			power = (PlayerController.Instance.transform.position.x / Static.MinX) * Static.ENEMY_MAX_POWER;
+			power = (PlayerController.Instance.transform.position.x / Static.MinX) *(Static.ENEMY_MAX_POWER * (windowWidth /720));
 
-		prefabBullet.SetPowerDirection(power, (target - bow.transform.position).normalized);
+        prefabBullet.SetPowerDirection(power, (target - bow.transform.position).normalized);
 		arrow.transform.position = bow.transform.position;
 	}
 

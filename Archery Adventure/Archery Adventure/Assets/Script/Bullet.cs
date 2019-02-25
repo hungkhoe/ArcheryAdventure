@@ -28,7 +28,6 @@ public class Bullet : MonoBehaviour {
         if(screenPoint.x > 1 || screenPoint.y < 0)
         {
             Destroy(this.gameObject);
-
 			//GameController.Instance.EnemyAttack ();
         }     
     }
@@ -52,7 +51,7 @@ public class Bullet : MonoBehaviour {
     {
         direction = _direction;
         power = _power;
-        rigid.velocity = direction * power / 6.5F;
+        rigid.velocity = direction * power / 9.5f;
     }  
   
 	protected virtual void OnTriggerEnter2D(Collider2D collision)

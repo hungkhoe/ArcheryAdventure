@@ -9,6 +9,8 @@ public static class Static
 	public static float ENEMY_MAX_HEIGHT_AIM = 5f;
 	public static float ENEMY_MIN_HEIGHT_AIM = 2f;
 	public static float ENEMY_MAX_POWER = 50f;
+    public static float DEFAULT_WINDOWWIDTH = 720f;
+    public static float DEFAULT_WINDOWHEIGHT = 1280f;
 
     public static string strPathSavedData
     {

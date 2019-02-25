@@ -31,7 +31,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     bool canShooting;
     static PlayerController instance;
-    bool IsGameStart, isLosing, isWinning;
+    bool IsGameStart, isLosing, isWinning,IsSpawn;
+    Rigidbody2D rb;
     public static PlayerController Instance {
 
         get {
@@ -61,7 +62,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (IsGameStart)
         {
-            PlayerControl();
+            PlayerControl();         
         } 
         //       
         if (health <= 0)
@@ -69,7 +70,6 @@ public class PlayerController : MonoBehaviour
             UIController.Instance.SetLosing(true);
             isLosing = true;
         }
-        Debug.Log(health);
     }
 
 
@@ -89,34 +89,87 @@ public class PlayerController : MonoBehaviour
 
     void PlayerControl()
     {
-		if (canShooting) {
+#if UNITY_EDITOR
+        if (canShooting)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Vector3 startPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                startPoint.z = 15;
+                dot_testArray[0].transform.position = startPoint;
+                dot_testArray[0].SetActive(true);
+                dot_testArray[1].SetActive(true);
+            }
 
-			if (Input.GetMouseButtonDown (0)) {
-			
+            if (Input.GetMouseButton(0))
+            {
+                isHolding = true;
+                isDestroyingDotTest = true;
+                dot_testArray[0].SetActive(true);
+                dot_testArray[1].SetActive(true);
+                AdjustFirePower();
+            }
 
-				Vector3 startPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-				startPoint.z = 15;
-				dot_testArray [0].transform.position = startPoint;
-			}
+            else
+            {
+                if (isHolding == true)
+                {
+                    isHolding = false;
+                    if (isDestroyingDotTest)
+                    {
+                        ClearDotTest();                     
+                    }
+                }
+            }
+        }
+#endif
 
-			if (Input.GetMouseButton (0)) {
-				isHolding = true;
-				isDestroyingDotTest = true;
-				AdjustFirePower ();
 
-			} else {
-				if (isHolding == true) {
-					isHolding = false;
-					if (isDestroyingDotTest) {
-						ClearDotTest ();
-					}
-				}
-			}
-				
-		}
+#if UNITY_ANDROID
+        //if (canShooting)
+        //{
+        //    if (Input.touchCount > 0)
+        //    {
+        //        Touch touch = Input.GetTouch(0);
+        //        if (touch.phase == TouchPhase.Began)
+        //        {
+        //            Vector3 startPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        //            startPoint.z = 15;
+        //            dot_testArray[0].transform.position = startPoint;
+        //            dot_testArray[0].SetActive(true);
+        //            dot_testArray[1].SetActive(true);
+        //        }
+        //        if (touch.phase == TouchPhase.Moved)
+        //        {
+        //            isHolding = true;
+        //            isDestroyingDotTest = true;
+        //            dot_testArray[0].SetActive(true);
+        //            dot_testArray[1].SetActive(true);
+        //            AdjustFirePower();
+        //        }
+        //    }
+        //    //if (Input.touchCount > 0)
+        //    //{
+        //    //    isHolding = true;
+        //    //    isDestroyingDotTest = true;
+        //    //    AdjustFirePower();
+        //    //}
+        //    else
+        //    {
+        //        if (isHolding == true)
+        //        {
+        //            isHolding = false;
+        //            if (isDestroyingDotTest)
+        //            {
+        //                ClearDotTest();
+        //            }
+        //        }
+        //    }
+        //}
+#endif
     }
 
-	public bool CanShooting{
+    public bool CanShooting{
 
 		set{ 
 		
@@ -135,6 +188,7 @@ public class PlayerController : MonoBehaviour
 				Vector3 convertPositon = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 				convertPositon.z = 15;
 				dot_testArray [i].transform.position = convertPositon;
+                dot_testArray[i].SetActive(false);
 			}
 		}
    
@@ -144,11 +198,15 @@ public class PlayerController : MonoBehaviour
     {
         if (dot_testArray[1] != null)
         {
-			dot_testArray[0].SetActive(true);
-			dot_testArray[1].SetActive(true);
-
             lineCheck.enabled = true;
             Vector3 convertPositon = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+#if UNITY_ANDROID
+            if(Input.touchCount > 0)
+            {
+                Touch touch = Input.GetTouch(0);
+                convertPositon = Camera.main.ScreenToWorldPoint(touch.position);
+            }
+#endif
             convertPositon.z = 15;
             dot_testArray[1].transform.position = convertPositon;
 
@@ -169,9 +227,9 @@ public class PlayerController : MonoBehaviour
             }   
 
 			float angle = 0;
-			if(GetComponent<MovingController>().dir>0)
+			//if(GetComponent<MovingController>().dir>0)
 				angle = Mathf.Atan2(dot_testArray[1].transform.position.y-dot_testArray[0].transform.position.y, dot_testArray[1].transform.position.x-dot_testArray[0].transform.position.x)*180 / Mathf.PI-180;
-			else angle = Mathf.Atan2(dot_testArray[1].transform.position.y-dot_testArray[0].transform.position.y, dot_testArray[1].transform.position.x-dot_testArray[0].transform.position.x)*180 / Mathf.PI;
+			//else angle = Mathf.Atan2(dot_testArray[1].transform.position.y-dot_testArray[0].transform.position.y, dot_testArray[1].transform.position.x-dot_testArray[0].transform.position.x)*180 / Mathf.PI;
 			bow.transform.rotation = Quaternion.Euler (bow.transform.rotation.x, bow.transform.rotation.y, bow.transform.rotation.z + angle);
         }
     }    
@@ -196,20 +254,13 @@ public class PlayerController : MonoBehaviour
             prefabBullet.SetDamage(damage);
             prefabBullet.SetRotationAngle(angleMeasurement);
             prefabBullet.SetPowerDirection(powerMeasurement, testingHeading);
-			temp.transform.position = bow.transform.position;
-			canShooting = false;
+			temp.transform.position = bow.transform.position;			
         }    
 
         lineCheck.enabled = false;
         powerMeasurement = 0;
         angleMeasurement = 0;
-    }
-
-    void UI_Update()
-    {
-        powerText.text = powerMeasurement.ToString("F0");
-        angleText.text = angleMeasurement.ToString("F0") +  "°";
-    }
+    }   
 
     void SetUpPlayerControl()
     {
@@ -234,11 +285,13 @@ public class PlayerController : MonoBehaviour
         canShooting = true;
         damage = 1;
         health = 3;
+        rb = GetComponent<Rigidbody2D>();
     }
 
     public void SetGameStart()
     {
         IsGameStart = true;
+        canShooting = true;
     }
 
     public void SetLosing()
@@ -248,6 +301,37 @@ public class PlayerController : MonoBehaviour
     public void SetWinning()
     {
         isWinning = true;
+    }
+
+    public void PlayerRunToDestination()
+    {
+        rb.velocity = Vector2.right * 2;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.tag == "Destination")
+        {
+            if(IsSpawn == true)
+            {
+                canShooting = true;
+                GameManager.Instance.SetPlayerCanNotRun();
+                rb.velocity = Vector2.zero;
+                GameManager.Instance.SpawnEnemy();
+                Destroy(collision.gameObject);
+                Debug.Log("Spawn Enemy");
+            }            
+        }
+    }
+
+    public void SetCanShoot(bool _canShoot)
+    {
+        canShooting = _canShoot;
+    }
+
+    public void SetCannotSpawn(bool _IsSpawn)
+    {
+        IsSpawn = _IsSpawn;
     }
 }
 

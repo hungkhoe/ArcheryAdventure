@@ -16,7 +16,6 @@ public class UIController : MonoBehaviour {
     {
         get
         {
-
             return instance;
         }
     }
@@ -26,9 +25,8 @@ public class UIController : MonoBehaviour {
         instance = this;
 
     }
-    public void StartGame_OnClick(){
+    public void StartGame_OnClick(){	
 	
-		GameController.Instance.StartGame ();
 		transform.GetChild (0).gameObject.SetActive (false);
         InitUIController();
     }
@@ -41,7 +39,7 @@ public class UIController : MonoBehaviour {
         }
         else if(isWinning)
         {
-            losingPanel.SetActive(false);
+            winningButton.gameObject.SetActive(true);
         }
     }
 
@@ -52,19 +50,18 @@ public class UIController : MonoBehaviour {
     }
 
     public void SetLosing(bool _isLosing)
-    {
-        
+    {        
         isLosing = _isLosing;
     }
 
     void WinningButtonFunction()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("HuyScene");
+        UnityEngine.SceneManagement.SceneManager.LoadScene("ArcheryAdventureScene2");
     }
 
     void LosingButtonFunction()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("HuyScene");
+        UnityEngine.SceneManagement.SceneManager.LoadScene("ArcheryAdventureScene2");
     }
 
     void InitUIController()

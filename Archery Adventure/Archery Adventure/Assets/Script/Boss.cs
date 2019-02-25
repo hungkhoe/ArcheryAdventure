@@ -29,6 +29,11 @@ public class Boss : Enemy {
     public override void TakeDamage(int _damage)
     {
         health -= _damage;
+        if (health <= 0)
+        {
+            Destroy(this.gameObject);
+            UIController.Instance.SetWinning(true);
+        }
         if (health > 0)
         {
             GetComponent<MovingController>().Move();
@@ -41,11 +46,7 @@ public class Boss : Enemy {
 
         }
 
-        if (health <= 0)
-        {
-            Destroy(this.gameObject);
-            UIController.Instance.SetWinning(true);
-        }
+        
 
         //GameController.Instance.NextStep ();
     }
