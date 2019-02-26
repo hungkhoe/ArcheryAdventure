@@ -33,8 +33,7 @@ public class GameManager : MonoBehaviour {
     void Start()
     {
         curEnemy = -1;      
-        InitGame();
-        SpawnEnemy();
+        InitGame();        
     }    
     // Update is called once per frame
     void Update()

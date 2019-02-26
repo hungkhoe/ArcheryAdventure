@@ -28,6 +28,7 @@ public class UIController : MonoBehaviour {
     public void StartGame_OnClick(){	
 	
 		transform.GetChild (0).gameObject.SetActive (false);
+        GameManager.Instance.SpawnEnemy();
         InitUIController();
     }
 
@@ -35,7 +36,7 @@ public class UIController : MonoBehaviour {
     {
         if(isLosing)
         {
-            losingPanel.SetActive(true);
+            losingButton.gameObject.SetActive(true);
         }
         else if(isWinning)
         {
@@ -73,7 +74,7 @@ public class UIController : MonoBehaviour {
         }
         if (winningButton != null)
         {
-            winningButton.onClick.AddListener(LosingButtonFunction);
+            winningButton.onClick.AddListener(WinningButtonFunction);
         }
     }
 }

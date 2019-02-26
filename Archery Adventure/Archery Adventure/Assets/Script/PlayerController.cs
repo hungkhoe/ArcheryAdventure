@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour
     bool isShooting = false;
 
     Text health_Text;
-    int damage;
+    int damage,score;
     LineRenderer lineCheck;
     Text powerText, angleText;
     bool isTestMovement;
@@ -72,11 +72,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
 	public void TakeDamage(int _damage)
 	{
 		health -= _damage;
 	}
+
 	public int GetDamage()
 	{
 		return damage;
@@ -298,6 +298,7 @@ public class PlayerController : MonoBehaviour
     {
         isLosing = true;
     }
+
     public void SetWinning()
     {
         isWinning = true;
@@ -332,6 +333,11 @@ public class PlayerController : MonoBehaviour
     public void SetCannotSpawn(bool _IsSpawn)
     {
         IsSpawn = _IsSpawn;
+    }
+
+    public void IncreaseScore(int _score)
+    {
+        score += _score;
     }
 }
 
