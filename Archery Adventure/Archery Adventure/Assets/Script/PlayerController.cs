@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     bool isHolding, isDestroyingDotTest;
     [SerializeField]
-    GameObject prefab_DotTest, prefab_bulletTest;
+    GameObject prefab_DotTest, prefab_bulletTest,prefabFireBall;
     //[SerializeField]
     GameObject[] dot_testArray;
     [SerializeField]
@@ -40,6 +40,7 @@ public class PlayerController : MonoBehaviour
             return instance;
         }
     }
+
     void Awake() {
 
         instance = this;
@@ -51,11 +52,12 @@ public class PlayerController : MonoBehaviour
         CreateCircleDistance();
         SetUpPlayerControl();
         //lineCheck.SetPosition ();
+        IsSpawn = true;
     }
 
     // Update is called once per frame
     void Update()
-    {
+    {   
         if (isLosing || isWinning)
         {
         
@@ -74,6 +76,11 @@ public class PlayerController : MonoBehaviour
 
 	public void TakeDamage(int _damage)
 	{
+        if(isLosing||isWinning)
+        {
+
+        }
+        else
 		health -= _damage;
 	}
 
@@ -109,7 +116,6 @@ public class PlayerController : MonoBehaviour
                 dot_testArray[1].SetActive(true);
                 AdjustFirePower();
             }
-
             else
             {
                 if (isHolding == true)
@@ -126,46 +132,40 @@ public class PlayerController : MonoBehaviour
 
 
 #if UNITY_ANDROID
-        //if (canShooting)
-        //{
-        //    if (Input.touchCount > 0)
-        //    {
-        //        Touch touch = Input.GetTouch(0);
-        //        if (touch.phase == TouchPhase.Began)
-        //        {
-        //            Vector3 startPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        //            startPoint.z = 15;
-        //            dot_testArray[0].transform.position = startPoint;
-        //            dot_testArray[0].SetActive(true);
-        //            dot_testArray[1].SetActive(true);
-        //        }
-        //        if (touch.phase == TouchPhase.Moved)
-        //        {
-        //            isHolding = true;
-        //            isDestroyingDotTest = true;
-        //            dot_testArray[0].SetActive(true);
-        //            dot_testArray[1].SetActive(true);
-        //            AdjustFirePower();
-        //        }
-        //    }
-        //    //if (Input.touchCount > 0)
-        //    //{
-        //    //    isHolding = true;
-        //    //    isDestroyingDotTest = true;
-        //    //    AdjustFirePower();
-        //    //}
-        //    else
-        //    {
-        //        if (isHolding == true)
-        //        {
-        //            isHolding = false;
-        //            if (isDestroyingDotTest)
-        //            {
-        //                ClearDotTest();
-        //            }
-        //        }
-        //    }
-        //}
+        if (canShooting)
+        {
+            //if (Input.touchCount > 0)
+            //{
+            //    Touch touch = Input.GetTouch(0);
+            //    if (touch.phase == TouchPhase.Began)
+            //    {
+            //        Vector3 startPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            //        startPoint.z = 15;
+            //        dot_testArray[0].transform.position = startPoint;
+            //        dot_testArray[0].SetActive(true);
+            //        dot_testArray[1].SetActive(true);
+            //    }
+            //    if (touch.phase == TouchPhase.Moved)
+            //    {
+            //        isHolding = true;
+            //        isDestroyingDotTest = true;
+            //        dot_testArray[0].SetActive(true);
+            //        dot_testArray[1].SetActive(true);
+            //        AdjustFirePower();
+            //    }
+            //}
+            //else
+            //{
+            //    if (isHolding == true)
+            //    {
+            //        isHolding = false;
+            //        if (isDestroyingDotTest)
+            //        {
+            //            ClearDotTest();
+            //        }
+            //    }
+            //}
+        }
 #endif
     }
 
@@ -213,7 +213,7 @@ public class PlayerController : MonoBehaviour
 			lineCheck.SetPosition(0, new Vector3(dot_testArray[0].transform.position.x, dot_testArray[0].transform.position.y , -1));
 			lineCheck.SetPosition(1, new Vector3(dot_testArray[1].transform.position.x, dot_testArray[1].transform.position.y, -1));
 
-            powerMeasurement = (Vector3.Distance(dot_testArray[0].transform.position, dot_testArray[1].transform.position)) * 30;
+            powerMeasurement = (Vector3.Distance(dot_testArray[0].transform.position, dot_testArray[1].transform.position)) * 40;
             Vector3 targerDirection = dot_testArray[1].transform.position - dot_testArray[0].transform.position;
 
             Vector3 targetDir = dot_testArray[1].transform.position - dot_testArray[0].transform.position;           
@@ -316,11 +316,11 @@ public class PlayerController : MonoBehaviour
             if(IsSpawn == true)
             {
                 canShooting = true;
-                GameManager.Instance.SetPlayerCanNotRun();
+                //GameManager.Instance.SetPlayerCanNotRun();
                 rb.velocity = Vector2.zero;
                 GameManager.Instance.SpawnEnemy();
-                Destroy(collision.gameObject);
-                Debug.Log("Spawn Enemy");
+                GameManager.Instance.SpawnEnemyZombie();
+                Destroy(collision.gameObject);              
             }            
         }
     }
@@ -338,6 +338,12 @@ public class PlayerController : MonoBehaviour
     public void IncreaseScore(int _score)
     {
         score += _score;
+    }
+
+    public void FireBall()
+    {
+        GameObject fireBall = Instantiate(prefabFireBall);
+        fireBall.transform.position = transform.GetChild(1).position;
     }
 }
 

@@ -12,12 +12,7 @@ public class NewEnemyArrow : MonoBehaviour {
     bool hit;
     int damage = 1;
 	void Start () {
-        rigid = GetComponent<Rigidbody2D>();
-        col2D = GetComponent<Collider2D>();
-        GameObject player = GameObject.Find("Player");
-        spriteRenderPlayer = player.GetComponentInChildren<SpriteRenderer>();
-        widthPlayer = spriteRenderPlayer.size.x;
-        SetTrajectory(GetComponent<Rigidbody2D>(), PlayerController.Instance.gameObject.transform.position, 15);      
+        InitArrow();
     }  
 
     // Update is called once per frame
@@ -41,23 +36,31 @@ public class NewEnemyArrow : MonoBehaviour {
 
     public void SetTrajectory(Rigidbody2D rigidbody2D, Vector2 target, float force, float arch = 0.8f)
     {
-        arch = Random.Range(0.1f, 0.6f);
+        arch = Random.Range(0.2f, 0.5f);
         Mathf.Clamp(arch, 0, 1);
         var origin = rigidbody2D.position;            
-        target.x = Random.Range(-widthPlayer / 3f + target.x, widthPlayer/ 3f + target.x);
+        target.x = Random.Range(-widthPlayer / 4f + target.x, widthPlayer/ 4f + target.x);
         float x = target.x - origin.x;
         float y = target.y - origin.y;           
         float gravity = -Physics2D.gravity.y;
         float b = force * force - y * gravity;
-        float discriminant = b * b - gravity * gravity * (x * x + y * y);       
-        float discriminantSquareRoot = Mathf.Sqrt(discriminant);
-        float minTime = Mathf.Sqrt((b - discriminantSquareRoot) * 2) / Mathf.Abs(gravity);
-        float maxTime = Mathf.Sqrt((b + discriminantSquareRoot) * 2) / Mathf.Abs(gravity);
-        float time = (maxTime - minTime) * arch + minTime;
-        float vx = x / time;
-        float vy = y / time + time * gravity / 2;
-        var trajectory = new Vector2(vx, vy);
-        rigidbody2D.AddForce(trajectory, ForceMode2D.Impulse);        
+        float discriminant = b * b - gravity * gravity * (x * x + y * y);
+        if (discriminant < 0)
+        {
+            
+        }
+        else
+        {
+            float discriminantSquareRoot = Mathf.Sqrt(discriminant);
+            float minTime = Mathf.Sqrt((b - discriminantSquareRoot) * 2) / Mathf.Abs(gravity);
+            float maxTime = Mathf.Sqrt((b + discriminantSquareRoot) * 2) / Mathf.Abs(gravity);
+            float time = (maxTime - minTime) * arch + minTime;
+            float vx = x / time;
+            float vy = y / time + time * gravity / 2;
+            var trajectory = new Vector2(vx, vy);
+            rigidbody2D.AddForce(trajectory, ForceMode2D.Impulse);
+        }
+         
     }
 
     protected void OnTriggerEnter2D(Collider2D collision)
@@ -66,7 +69,7 @@ public class NewEnemyArrow : MonoBehaviour {
         {
             if (!hit)
             {
-                collision.gameObject.GetComponent<PlayerController>().TakeDamage(damage);
+                PlayerController.Instance.TakeDamage(damage);
                 ArrowStick(collision);
                 hit = true;
             }
@@ -78,5 +81,15 @@ public class NewEnemyArrow : MonoBehaviour {
         transform.parent = col.transform;
         Destroy(rigid);
         Destroy(col2D);
+    }
+
+    void InitArrow()
+    {
+        rigid = GetComponent<Rigidbody2D>();
+        col2D = GetComponent<Collider2D>();
+        GameObject player = GameObject.Find("Player");
+        spriteRenderPlayer = player.GetComponentInChildren<SpriteRenderer>();
+        widthPlayer = spriteRenderPlayer.size.x;
+        SetTrajectory(GetComponent<Rigidbody2D>(), PlayerController.Instance.gameObject.transform.position, 10);
     }
 }

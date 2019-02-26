@@ -8,7 +8,7 @@ public class UIController : MonoBehaviour {
     [SerializeField]
     GameObject winningPanel, losingPanel;
     [SerializeField]
-    Button winningButton, losingButton;
+    Button winningButton, losingButton,fireButton;
 
     static UIController instance;
     bool isWinning, isLosing;
@@ -25,10 +25,12 @@ public class UIController : MonoBehaviour {
         instance = this;
 
     }
+
     public void StartGame_OnClick(){	
 	
 		transform.GetChild (0).gameObject.SetActive (false);
         GameManager.Instance.SpawnEnemy();
+        GameManager.Instance.SpawnEnemyZombie();
         InitUIController();
     }
 
@@ -76,5 +78,15 @@ public class UIController : MonoBehaviour {
         {
             winningButton.onClick.AddListener(WinningButtonFunction);
         }
+        if(fireButton != null)
+        {
+            fireButton.onClick.AddListener(FireButtonFunction);
+        }
+        GameManager.Instance.SetPlayerCanRun();
+    }
+
+    void FireButtonFunction()
+    {
+        PlayerController.Instance.FireBall();
     }
 }

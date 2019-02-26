@@ -8,8 +8,8 @@ public class NewEnemyScript : MonoBehaviour {
     [SerializeField]
     GameObject prefab_EnemyArrow;    
 
-    float timer = 2;
-    float timeToShoot = 2;
+    float timer = 1.8f;
+    float timeToShoot = 1.8f;
 
     void Start () {
 	}
@@ -32,5 +32,14 @@ public class NewEnemyScript : MonoBehaviour {
             temp.transform.position = transform.position;
             temp.transform.parent = transform;
         }       
+    }  
+
+    protected void LateUpdate()
+    {
+        Vector3 screenPoint = Camera.main.WorldToViewportPoint(transform.position);
+        if (screenPoint.y < 0 || screenPoint.x < 0)
+        {
+            Destroy(this.gameObject);
+        }
     }
 }

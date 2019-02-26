@@ -22,8 +22,9 @@ public class PlayerBullet : Bullet {
                 //collision.gameObject.GetComponent<Enemy>().TakeDamage(damage);
                 ArrowStick(collision);
                 hit = true;
-                PlayerController.Instance.SetCanShoot(false);
-                PlayerController.Instance.SetCannotSpawn(true);
+                // comment cho ban 2
+                //PlayerController.Instance.SetCanShoot(false);
+                //PlayerController.Instance.SetCannotSpawn(true);
                 GameManager.Instance.SetPlayerCanRun();
                 Destroy(collision.gameObject);
             }
@@ -32,6 +33,6 @@ public class PlayerBullet : Bullet {
         {
             ArrowStick(collision);
             hit = true;
-        }
+        }     
     }
 }

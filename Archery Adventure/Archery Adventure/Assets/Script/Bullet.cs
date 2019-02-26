@@ -51,7 +51,7 @@ public class Bullet : MonoBehaviour {
     {
         direction = _direction;
         power = _power;
-        rigid.velocity = direction * power / 9.5f;
+        rigid.velocity = direction * power /9f;
     }  
   
 	protected virtual void OnTriggerEnter2D(Collider2D collision)
