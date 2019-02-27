@@ -6,5 +6,5 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/ArcheryAdventureScene2.unity
-    guid: 7d937ffb35b18fe4bb513fa6546ac445
+    path: Assets/Scenes/NewMrGunScene.unity
+    guid: 337e9178ffc6b6e4f9262dcaafdf4dcc

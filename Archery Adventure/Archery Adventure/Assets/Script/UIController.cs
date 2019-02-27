@@ -8,7 +8,7 @@ public class UIController : MonoBehaviour {
     [SerializeField]
     GameObject winningPanel, losingPanel;
     [SerializeField]
-    Button winningButton, losingButton,fireButton;
+    Button winningButton, losingButton,fireButton,spearButton,bowButton;
 
     static UIController instance;
     bool isWinning, isLosing;
@@ -31,9 +31,15 @@ public class UIController : MonoBehaviour {
 		transform.GetChild (0).gameObject.SetActive (false);
         GameManager.Instance.SpawnEnemy();
         GameManager.Instance.SpawnEnemyZombie();
-        InitUIController();
+        GameManager.Instance.SetPlayerCanRun();
+        PlayerController.Instance.SetCanShoot(true);
+        PlayerController.Instance.SetGameStart();
     }
 
+    private void Start()
+    {
+        InitUIController();
+    }
     public void Update()
     {
         if(isLosing)
@@ -69,7 +75,7 @@ public class UIController : MonoBehaviour {
 
     void InitUIController()
     {
-        PlayerController.Instance.SetGameStart();
+     
         if (losingButton != null)
         {
             losingButton.onClick.AddListener(LosingButtonFunction);
@@ -82,11 +88,28 @@ public class UIController : MonoBehaviour {
         {
             fireButton.onClick.AddListener(FireButtonFunction);
         }
-        GameManager.Instance.SetPlayerCanRun();
+        if (spearButton != null)
+        {
+            spearButton.onClick.AddListener(SpearButtonFunction);
+        }
+        if (bowButton != null)
+        {
+            bowButton.onClick.AddListener(BowButtonFunction);
+        }      
     }
 
     void FireButtonFunction()
     {
         PlayerController.Instance.FireBall();
+    }
+
+    void SpearButtonFunction()
+    {
+        PlayerController.Instance.UseSpearWeapon();
+    }
+
+    void BowButtonFunction()
+    {
+        PlayerController.Instance.UseBowWeapon();
     }
 }

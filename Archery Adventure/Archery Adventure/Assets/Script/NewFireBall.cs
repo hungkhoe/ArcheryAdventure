@@ -12,7 +12,7 @@ public class NewFireBall : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        rb.velocity = Vector2.right * 2;
+        rb.velocity = Vector2.right * 5;
 	}
     protected void LateUpdate()
     {
@@ -20,6 +20,14 @@ public class NewFireBall : MonoBehaviour {
         if (screenPoint.x > 1 || screenPoint.y < 0)
         {
             Destroy(this.gameObject);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject.tag == "Enemy")
+        {
+            Destroy(collision.gameObject);
         }
     }
 }

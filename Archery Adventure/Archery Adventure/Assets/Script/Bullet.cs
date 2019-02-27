@@ -33,13 +33,14 @@ public class Bullet : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update () {
-        if(rigid != null)
+    void Update()
+    {
+        if (rigid != null)
         {
             Vector2 v = rigid.velocity;
             float angle = Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-        }      
+        }
     }
 
     public void SetRotationAngle(float _angle)

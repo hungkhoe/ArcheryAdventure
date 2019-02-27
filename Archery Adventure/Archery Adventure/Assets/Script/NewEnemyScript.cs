@@ -8,8 +8,8 @@ public class NewEnemyScript : MonoBehaviour {
     [SerializeField]
     GameObject prefab_EnemyArrow;    
 
-    float timer = 1.8f;
-    float timeToShoot = 1.8f;
+    float timer = 2;
+    float timeToShoot = 2;
 
     void Start () {
 	}

@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     float powerMeasurement, angleMeasurement;
     [SerializeField]
-    GameObject bow;
+    GameObject weapon;
     [SerializeField]
     int health;
     [SerializeField]
@@ -33,6 +33,8 @@ public class PlayerController : MonoBehaviour
     static PlayerController instance;
     bool IsGameStart, isLosing, isWinning,IsSpawn;
     Rigidbody2D rb;
+
+    float force,spearPower, arrowPower;
     public static PlayerController Instance {
 
         get {
@@ -53,6 +55,8 @@ public class PlayerController : MonoBehaviour
         SetUpPlayerControl();
         //lineCheck.SetPosition ();
         IsSpawn = true;
+        canShooting = false;
+        UseBowWeapon();
     }
 
     // Update is called once per frame
@@ -134,37 +138,37 @@ public class PlayerController : MonoBehaviour
 #if UNITY_ANDROID
         if (canShooting)
         {
-            //if (Input.touchCount > 0)
-            //{
-            //    Touch touch = Input.GetTouch(0);
-            //    if (touch.phase == TouchPhase.Began)
-            //    {
-            //        Vector3 startPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            //        startPoint.z = 15;
-            //        dot_testArray[0].transform.position = startPoint;
-            //        dot_testArray[0].SetActive(true);
-            //        dot_testArray[1].SetActive(true);
-            //    }
-            //    if (touch.phase == TouchPhase.Moved)
-            //    {
-            //        isHolding = true;
-            //        isDestroyingDotTest = true;
-            //        dot_testArray[0].SetActive(true);
-            //        dot_testArray[1].SetActive(true);
-            //        AdjustFirePower();
-            //    }
-            //}
-            //else
-            //{
-            //    if (isHolding == true)
-            //    {
-            //        isHolding = false;
-            //        if (isDestroyingDotTest)
-            //        {
-            //            ClearDotTest();
-            //        }
-            //    }
-            //}
+            if (Input.touchCount > 0)
+            {
+                Touch touch = Input.GetTouch(0);
+                if (touch.phase == TouchPhase.Began)
+                {
+                    Vector3 startPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    startPoint.z = 15;
+                    dot_testArray[0].transform.position = startPoint;
+                    dot_testArray[0].SetActive(true);
+                    dot_testArray[1].SetActive(true);
+                }
+                if (touch.phase == TouchPhase.Moved)
+                {
+                    isHolding = true;
+                    isDestroyingDotTest = true;
+                    dot_testArray[0].SetActive(true);
+                    dot_testArray[1].SetActive(true);
+                    AdjustFirePower();
+                }
+            }
+            else
+            {
+                if (isHolding == true)
+                {
+                    isHolding = false;
+                    if (isDestroyingDotTest)
+                    {
+                        ClearDotTest();
+                    }
+                }
+            }
         }
 #endif
     }
@@ -190,8 +194,7 @@ public class PlayerController : MonoBehaviour
 				dot_testArray [i].transform.position = convertPositon;
                 dot_testArray[i].SetActive(false);
 			}
-		}
-   
+		}   
     }
 
 	void AdjustFirePower()
@@ -213,7 +216,7 @@ public class PlayerController : MonoBehaviour
 			lineCheck.SetPosition(0, new Vector3(dot_testArray[0].transform.position.x, dot_testArray[0].transform.position.y , -1));
 			lineCheck.SetPosition(1, new Vector3(dot_testArray[1].transform.position.x, dot_testArray[1].transform.position.y, -1));
 
-            powerMeasurement = (Vector3.Distance(dot_testArray[0].transform.position, dot_testArray[1].transform.position)) * 40;
+            powerMeasurement = (Vector3.Distance(dot_testArray[0].transform.position, dot_testArray[1].transform.position)) * 35;
             Vector3 targerDirection = dot_testArray[1].transform.position - dot_testArray[0].transform.position;
 
             Vector3 targetDir = dot_testArray[1].transform.position - dot_testArray[0].transform.position;           
@@ -221,16 +224,16 @@ public class PlayerController : MonoBehaviour
             angleMeasurement = 
                 Quaternion.FromToRotation(dot_testArray[0].transform.right, dot_testArray[1].transform.position - dot_testArray[0].transform.position).eulerAngles.z - 180;
 
-            if (powerMeasurement >= 100)
+            if (powerMeasurement >= force)
             {
-                powerMeasurement = 100;
+                powerMeasurement = force;
             }   
 
 			float angle = 0;
 			//if(GetComponent<MovingController>().dir>0)
 				angle = Mathf.Atan2(dot_testArray[1].transform.position.y-dot_testArray[0].transform.position.y, dot_testArray[1].transform.position.x-dot_testArray[0].transform.position.x)*180 / Mathf.PI-180;
 			//else angle = Mathf.Atan2(dot_testArray[1].transform.position.y-dot_testArray[0].transform.position.y, dot_testArray[1].transform.position.x-dot_testArray[0].transform.position.x)*180 / Mathf.PI;
-			bow.transform.rotation = Quaternion.Euler (bow.transform.rotation.x, bow.transform.rotation.y, bow.transform.rotation.z + angle);
+			weapon.transform.rotation = Quaternion.Euler (weapon.transform.rotation.x, weapon.transform.rotation.y, weapon.transform.rotation.z + angle);
         }
     }    
 
@@ -254,7 +257,7 @@ public class PlayerController : MonoBehaviour
             prefabBullet.SetDamage(damage);
             prefabBullet.SetRotationAngle(angleMeasurement);
             prefabBullet.SetPowerDirection(powerMeasurement, testingHeading);
-			temp.transform.position = bow.transform.position;			
+			temp.transform.position = weapon.transform.position;			
         }    
 
         lineCheck.enabled = false;
@@ -286,6 +289,8 @@ public class PlayerController : MonoBehaviour
         damage = 1;
         health = 3;
         rb = GetComponent<Rigidbody2D>();
+        arrowPower = 100;
+        spearPower = 80;
     }
 
     public void SetGameStart()
@@ -344,6 +349,28 @@ public class PlayerController : MonoBehaviour
     {
         GameObject fireBall = Instantiate(prefabFireBall);
         fireBall.transform.position = transform.GetChild(1).position;
+    }
+
+    public void UseSpearWeapon()
+    {
+        if (weapon)
+        {
+            Destroy(weapon.gameObject);
+        }
+        weapon = Instantiate(Resources.Load<GameObject>("NewGamePrefab/Spear_Weapon"), this.transform);
+        prefab_bulletTest = Resources.Load<GameObject>("NewGamePrefab/Spear");
+        force = spearPower;
+    }
+
+    public void UseBowWeapon()
+    {
+        if (weapon)
+        {
+            Destroy(weapon.gameObject);
+        }
+        weapon = Instantiate(Resources.Load<GameObject>("NewGamePrefab/Bow"), this.transform);
+        prefab_bulletTest = Resources.Load<GameObject>("NewGamePrefab/arrow");
+        force = arrowPower;
     }
 }
 
