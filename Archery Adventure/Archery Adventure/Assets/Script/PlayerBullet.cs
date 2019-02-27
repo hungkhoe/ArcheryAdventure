@@ -12,7 +12,7 @@ public class PlayerBullet : Bullet {
 			Destroy(this.gameObject);            
 		}     
 	}
-    
+
     protected override void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Enemy")
@@ -27,6 +27,11 @@ public class PlayerBullet : Bullet {
                 GameManager.Instance.SetPlayerCanRun();
                 Destroy(collision.gameObject);
             }
+        }
+        else if (collision.gameObject.tag == "Ground")
+        {
+            ArrowStick(collision);
+            hit = true;
         }
     }
 }
