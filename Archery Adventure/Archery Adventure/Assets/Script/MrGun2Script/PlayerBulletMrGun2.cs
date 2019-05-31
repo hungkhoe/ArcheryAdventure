@@ -50,17 +50,27 @@ public class PlayerBulletMrGun2 : MonoBehaviour {
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
-    {       
-
+    { 
         if (collision.gameObject.tag == "Enemy")
         {
-            Destroy(collision.gameObject);
-            PlayerControllerMrGun2.Instance.TOTALENEMYDESTROYED++;
+            ArrowStick(collision);
+            collision.GetComponent<EnemyScriptMrGun2>().EnemyTakeDamage();
             if (PlayerControllerMrGun2.Instance.TOTALENEMYDESTROYED == GameControllerMrGun2.Instance.GetTotalEnemyNeedToDestroyed())
             {
                 GameControllerMrGun2.Instance.SpawnPlatform();
-            }        
+            }           
         }
+
+        if (collision.gameObject.tag == "Boss")
+        {
+            ArrowStick(collision);
+            collision.GetComponent<EnemyScriptMrGun2>().EnemyTakeDamage();
+            if (PlayerControllerMrGun2.Instance.TOTALENEMYDESTROYED == GameControllerMrGun2.Instance.GetTotalEnemyNeedToDestroyed())
+            {
+                GameControllerMrGun2.Instance.SpawnPlatform();
+            }
+        }
+
         if (collision.gameObject.tag == "Ground")
         {
             ArrowStick(collision);

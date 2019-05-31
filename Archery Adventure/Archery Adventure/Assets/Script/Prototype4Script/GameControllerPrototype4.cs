@@ -106,7 +106,7 @@ public class GameControllerPrototype4 : MonoBehaviour {
         cameraRB = Camera.main.GetComponent<Rigidbody2D>();
         isPlayerRunning = false;
         currentEnemy.SetActive(false);
-        enemyPlatform.SetActive(false);
+        enemyPlatform.SetActive(false);      
     }   
 
     public void StartGame()

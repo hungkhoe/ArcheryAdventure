@@ -8,3 +8,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MrGun2Scene.unity
     guid: 1abb58ffe62bb5b41aa439e74badf885
+  - enabled: 1
+    path: Assets/Scenes/MrGun2SceneLevel2.unity
+    guid: e7a494f8c6e5a0e45b2b8166c313d286
+  - enabled: 1
+    path: Assets/Scenes/MrGun2SceneLevel3.unity
+    guid: 059b9c3856df73d47a012970c506f3ac

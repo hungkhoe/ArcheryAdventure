@@ -12,11 +12,12 @@ public class EnemyScriptMrGun2 : MonoBehaviour {
     GameObject prefab_EnemyArrow;
 	void Start () {
         coolDownAttack = 5;
-        timer = Random.Range(0, 5);      
+        timer = Random.Range(0, 5);
+        health = 1;
 	}
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    public virtual void Update () {
         timer += Time.deltaTime;
         if(timer >= coolDownAttack)
         {
@@ -32,6 +33,15 @@ public class EnemyScriptMrGun2 : MonoBehaviour {
             GameObject temp = Instantiate(prefab_EnemyArrow);
             temp.transform.position = transform.position;
             temp.transform.parent = transform;
+        }
+    }
+    public virtual void EnemyTakeDamage()
+    {
+        health--;
+        if (health == 0)
+        {
+            Destroy(this.gameObject);
+            PlayerControllerMrGun2.Instance.TOTALENEMYDESTROYED++;
         }
     }
 }

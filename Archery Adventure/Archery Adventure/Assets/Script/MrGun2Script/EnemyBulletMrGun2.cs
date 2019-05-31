@@ -72,6 +72,7 @@ public class EnemyBulletMrGun2 : MonoBehaviour {
             {
                 ArrowStick(collision);           
                 hit = true;
+                PlayerControllerMrGun2.Instance.TakeDamage();
             }
         }
     }

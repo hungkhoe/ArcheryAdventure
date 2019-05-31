@@ -24,6 +24,7 @@ public class PlayerControllerMrGun2 : MonoBehaviour {
     bool isHolding,isDestroyingDotTest;
     float powerMeasurement, storePower;
     Vector3 testingHeading;
+    int health;
 
     public static PlayerControllerMrGun2 Instance
     {
@@ -44,7 +45,7 @@ public class PlayerControllerMrGun2 : MonoBehaviour {
         ResetAdjustDirection();     
         rb = GetComponent<Rigidbody2D>();
         CreateCircleDistance();
-        SetStarGame();
+        //SetStarGame();
     }
     // Update is called once per frame
     void Update()
@@ -100,61 +101,47 @@ public class PlayerControllerMrGun2 : MonoBehaviour {
                         }
                     }
                 }
-            }
-            else
-            {
-                if(isRunning)
-                {
-                    rb.velocity = Vector2.right * 2.5f;
-                }
-            }
+            }          
         }
 #endif
 #if UNITY_ANDROID
-        //if (isStarGame)
-        //{
-        //    if(isShooting)
-        //    {
-        //        if (Input.touchCount > 0)
-        //        {
-        //            Touch touch = Input.GetTouch(0);
-        //            if (touch.phase == TouchPhase.Began)
-        //            {
-        //                Vector3 startPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        //                startPoint.z = 15;
-        //                dot_testArray[0].transform.position = startPoint;
-        //                dot_testArray[0].SetActive(true);
-        //                dot_testArray[1].SetActive(true);
-        //            }
-        //            if (touch.phase == TouchPhase.Moved)
-        //            {
-        //                isHolding = true;
-        //                isDestroyingDotTest = true;
-        //                dot_testArray[0].SetActive(true);
-        //                dot_testArray[1].SetActive(true);
-        //                AdjustFirePower();
-        //            }
-        //        }
-        //        else
-        //        {
-        //            if (isHolding == true)
-        //            {
-        //                isHolding = false;
-        //                if (isDestroyingDotTest)
-        //                {
-        //                    ClearDotTest();
-        //                }
-        //            }
-        //        }
-        //    }
-        //    else
-        //    {
-        //        if (isRunning)
-        //        {
-        //            rb.velocity = Vector2.right * 2.5f;
-        //        }
-        //    }
-        //}
+        if (isStarGame)
+        {
+            if (isShooting)
+            {
+                if (Input.touchCount > 0)
+                {
+                    Touch touch = Input.GetTouch(0);
+                    if (touch.phase == TouchPhase.Began)
+                    {
+                        Vector3 startPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                        startPoint.z = 15;
+                        dot_testArray[0].transform.position = startPoint;
+                        dot_testArray[0].SetActive(true);
+                        dot_testArray[1].SetActive(true);
+                    }
+                    if (touch.phase == TouchPhase.Moved)
+                    {
+                        isHolding = true;
+                        isDestroyingDotTest = true;
+                        dot_testArray[0].SetActive(true);
+                        dot_testArray[1].SetActive(true);
+                        AdjustFirePower();
+                    }
+                }
+                else
+                {
+                    if (isHolding == true)
+                    {
+                        isHolding = false;
+                        if (isDestroyingDotTest)
+                        {
+                            ClearDotTest();
+                        }
+                    }
+               }
+            }           
+        }
 #endif
         //#if UNITY_ANDROID
         //        if (isStarGame)
@@ -191,6 +178,7 @@ public class PlayerControllerMrGun2 : MonoBehaviour {
             Destroy(collision.gameObject);
             ResetAdjustDirection();
             GameControllerMrGun2.Instance.DestroyPreviousPlatForm();
+            GameControllerMrGun2.Instance.SetCameraStop();
             rb.velocity = Vector2.zero;
             isRunning = false;
         }
@@ -230,6 +218,7 @@ public class PlayerControllerMrGun2 : MonoBehaviour {
         lineCheck.SetVertexCount(2);
         goUp = true;
         dottest.SetActive(false);
+        health = 5;
     }
 
     void ResetAdjustDirection()
@@ -258,7 +247,8 @@ public class PlayerControllerMrGun2 : MonoBehaviour {
         if(isRunning)
         {
             lineCheck.enabled = false;
-        }
+            rb.velocity = Vector2.right * 3.5f;
+        }    
     }
 
     public void FireGun()
@@ -394,7 +384,7 @@ public class PlayerControllerMrGun2 : MonoBehaviour {
             lineCheck.SetPosition(0, new Vector3(dot_testArray[0].transform.position.x, dot_testArray[0].transform.position.y, -1));
             lineCheck.SetPosition(1, new Vector3(dot_testArray[1].transform.position.x, dot_testArray[1].transform.position.y, -1));
 
-            powerMeasurement = (Vector3.Distance(dot_testArray[0].transform.position, dot_testArray[1].transform.position)) * 35;
+            powerMeasurement = (Vector3.Distance(dot_testArray[0].transform.position, dot_testArray[1].transform.position)) * 42;
             Vector3 targerDirection = dot_testArray[1].transform.position - dot_testArray[0].transform.position;
 
             Vector3 targetDir = dot_testArray[1].transform.position - dot_testArray[0].transform.position;
@@ -412,5 +402,17 @@ public class PlayerControllerMrGun2 : MonoBehaviour {
             angle = Mathf.Atan2(dot_testArray[1].transform.position.y - dot_testArray[0].transform.position.y, dot_testArray[1].transform.position.x - dot_testArray[0].transform.position.x) * 180 / Mathf.PI - 180;
             //else angle = Mathf.Atan2(dot_testArray[1].transform.position.y-dot_testArray[0].transform.position.y, dot_testArray[1].transform.position.x-dot_testArray[0].transform.position.x)*180 / Mathf.PI;           
         }
+    }
+
+    public void TakeDamage()
+    {
+        health--;
+        if(health <= 0)
+        {
+            GameControllerMrGun2.Instance.SetGameLose();
+            UIControllerMrGun2.Instance.SetLose();
+            isStarGame = false;
+        }
+
     }
 }
